@@ -1,0 +1,181 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{times}
+\usepackage{latexsym}
+
+\usepackage{url}
+
+\usepackage{CJKutf8}
+
+%  \usepackage{natbib}
+ % \bibliographystyle{plainnat}
+
+
+\pagestyle{plain}
+
+%\setlength\titlebox{5cm}
+% You can expand the titlebox if you need extra space
+% to show all the authors. Please do not make the titlebox
+% smaller than 5cm (the original size); we will check this
+% in the camera-ready version and ask you to change it back.
+
+\newcommand\BibTeX{B{\sc ib}\TeX}
+\newcommand\confname{EMNLP-IJCNLP 2019}
+\newcommand\conforg{SIGDAT}
+
+% Use the lineno option to display guide line numbers if required.
+
+\usepackage{amsmath}
+\usepackage{tikz-dependency}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator{\E}{\mathop{\mathbb{E}}}
+
+\usepackage{amssymb}% http://ctan.org/pkg/amssymb
+\usepackage{pifont}% http://ctan.org/pkg/pifont
+\newcommand{\cmark}{\ding{51}}%
+\newcommand{\xmark}{\ding{55}}%
+
+%\usepackage{pslatex}
+%\usepackage{latexsym}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{url}
+%\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+\usepackage{multirow}
+
+
+
+
+
+\usepackage[T1]{fontenc}
+
+\usepackage{pslatex}
+%\usepackage{latexsym}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{bm}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{url}
+%\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{rotating}
+%\usepackage{natbib}
+\usepackage{amssymb}
+
+
+\usepackage{amsthm}
+ 
+
+
+\newcounter{theorem}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{defin}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{thm}[theorem]{Theorem}
+
+
+\newcommand{\R}[0]{\mathbb{R}}
+\newcommand{\Ff}[0]{\mathcal{F}}
+\newcommand{\key}[1]{\textbf{#1}}
+
+
+\newcommand{\soft}[1]{}
+\newcommand{\nopreview}[1]{}
+\newcommand\comment[1]{{\color{red}#1}}
+\newcommand\mhahn[1]{{\color{red}(#1)}}
+\newcommand{\rljf}[1]{{\color{blue}[rljf: #1]}}
+
+\newcommand{\thetad}[0]{{\theta_d}}
+\newcommand{\thetal}[0]{{\theta_{LM}}}
+\newcommand{\thetap}[0]{{\theta_{P}}}
+
+
+\title{Dependency Length Minimization and Head-Final Word Order in Japanese}
+\author{Michael Hahn \\ Stanford University \\ mhahn2@stanford.edu}
+\date{\today}
+\begin{document}
+\maketitle
+\begin{abstract}
+DLM widely supported, but appears to be at odds with the high typological frequency of SOV and VSO orders.
+We report a corpus-based study of Japanese that tests this.
+\end{abstract}
+
+\section{Introduction}
+
+\section{Data}
+
+\section{Experiment 1: Optimization}
+
+recycle QP experiment
+
+here present the optimized grammars side-by-side
+
+\section{Experiment 2: Comparison of Dependency Length}
+
+Functional Heads:
+
+cc: \begin{CJK}{UTF8}{min}と, や\end{CJK} 
+
+case: doesn't apply to verbs\footnote{https://universaldependencies.org/ja/dep/case.html}
+
+cop: \begin{CJK}{UTF8}{min}だ\end{CJK} 
+
+mark: \begin{CJK}{UTF8}{min}と, か\end{CJK} 
+
+Method for bringing S to the other side: sorting it after the other dependents, as these are short (auxiliaries etc).
+
+\begin{center}
+\begin{tabular}{lllllllll}
+                    &                        & O,S same side   & O, S different sides    \\ \hline\hline
+Ordinary UD         & Plain                  & 53.34 & 53.09\\
+                    & Reordering Siblings    & 45.99 & 48.02 \\ \hline
+Removing FuncWords  & Plain                  & 23.85 & 23.53 \\
+                    & Reordering Siblings    & 19.68 & 20.71 \\ \hline
+FuncHead UD         & Plain                  & 51.81 & 53.24 \\ % (excluding aux)
+                    & Reordering Siblings    &  TODO     &  \\ \hline
+FuncHead UD+Aux         & Plain                  & 67.86 & 69.25 \\ % (including aux) TODO this faces the problem that stacked AUX might be analyzed in the wrong order
+                    & Reordering Siblings    &  TODO     & \\  \hline 
+\end{tabular}
+\end{center}
+
+TODO
+
+- COMPARISON TO ENGLISH
+
+- STATISTICAL INFERENCE
+
+
+\section{Experiment 2: Comparison of Information Locality}
+
+A measure of memory load that does not depend on the syntactic analysis
+
+\section{Experiment 3: What Factors are Responsible?}
+
+- all NPs are strictly head-final, and have final case marker
+
+- almost all verbs are `embedded'
+
+-- either with auxiliary
+
+-- or with something else
+
+
+
+
+
+\section{Conclusion}
+
+
+
+\end{document}
