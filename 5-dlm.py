@@ -14,11 +14,14 @@ language = sys.argv[1]
 model = "REAL_REAL"
 temperature = "Infinity"
 
-REMOVE_FUNCTIONAL_HEADS = False
-REVERSE_SUBJECT = False
-USE_FUNCHEAD_VERSIOM = False
+REMOVE_FUNCTIONAL_HEADS = True
+REVERSE_SUBJECT = True
+USE_FUNCHEAD_VERSION = True
+SORT_CHILDREN_BY_LENGTH = False
+REORDER_SUBJECT_INTERNAL = False
 USE_V_VERSION = True
-
+SORT_HD_SUBJECT_LAST = True
+SORT_RECURSIVELY_BY_LENGTH = False
 assert temperature == "Infinity"
 
 myID = random.randint(0,10000000)
@@ -40,7 +43,6 @@ conll_header = ["index", "word", "lemma", "posUni", "posFine", "morph", "head", 
 
 my_fileName = __file__.split("/")[-1]
 
-#from corpusIteratorFuncHead_V import CorpusIteratorFuncHead_V
 assert USE_FUNCHEAD_VERSION
 assert USE_V_VERSION
 from corpusIterator_FuncHead_V import CorpusIteratorFuncHead_V
@@ -119,7 +121,8 @@ def recursivelyLinearize(sentence, position, result, gradients_from_the_left_sum
       deps = [sentence[x-1]["coarse_dep"] for x in line["children_HD"]]
       if "nsubj" in deps and len(set(deps)) > 1:
          print(deps)
-
+      assert not SORT_CHILDREN_BY_LENGTH
+      assert SORT_HD_SUBJECT_LAST
       line["children_HD"] = sorted(line["children_HD"], key=lambda x:0 if sentence[x-1]["coarse_dep"] != "nsubj" else 1)
       for child in line["children_HD"]:
          assert child > 0
@@ -206,7 +209,8 @@ def orderSentence(sentence, dhLogits, printThings):
             assert 0 not in line["children"]
             eliminated = eliminated + [sentence[x-1] for x in line["children"]]
 
-   
+   assert not SORT_RECURSIVELY_BY_LENGTH
+  
    linearized = []
    recursivelyLinearize(sentence, root, linearized, 0)
 

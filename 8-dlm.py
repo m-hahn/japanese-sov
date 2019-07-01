@@ -16,6 +16,7 @@ temperature = "Infinity"
 
 REMOVE_FUNCTIONAL_HEADS = True
 REVERSE_SUBJECT = False
+USE_V_VERSION = True
 
 assert temperature == "Infinity"
 
@@ -39,6 +40,7 @@ conll_header = ["index", "word", "lemma", "posUni", "posFine", "morph", "head", 
 my_fileName = __file__.split("/")[-1]
 
 #from corpusIteratorFuncHead_V import CorpusIteratorFuncHead_V
+assert USE_V_VERSION
 from corpusIterator_FuncHead_V import CorpusIteratorFuncHead_V
 
 originalDistanceWeights = {}
@@ -199,7 +201,7 @@ def orderSentence(sentence, dhLogits, printThings):
             eliminated.append(line)
          continue
 
-      assert REMOVE_FUNCTIONAL_HEADS:
+      assert REMOVE_FUNCTIONAL_HEADS
       if line["coarse_dep"] in ["aux", "mark", "case", "neg", "cc"]: #.startswith("punct"): # assumes that punctuation does not have non-punctuation dependents!
          if model == "REAL_REAL":
             eliminated.append(line)

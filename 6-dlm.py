@@ -16,10 +16,15 @@ language = sys.argv[1]
 model = "REAL_REAL"
 temperature = "Infinity"
 
-
-REMOVE_FUNCTIONAL_HEADS = True
+REMOVE_FUNCTIONAL_HEADS = False
 REVERSE_SUBJECT = True
 USE_FUNCHEAD_VERSIOM = True
+SORT_CHILDREN_BY_LENGTH = True
+REORDER_SUBJECT_INTERNAL = False
+USE_V_VERSION = True
+SORT_HD_SUBJECT_LAST = False
+SORT_RECURSIVELY_BY_LENGTH = True
+
 assert temperature == "Infinity"
 
 myID = random.randint(0,10000000)
@@ -43,7 +48,6 @@ my_fileName = __file__.split("/")[-1]
 
 assert USE_FUNCHEAD_VERSIOM
 assert USE_V_VERSION
-#from corpusIteratorFuncHead_V import CorpusIteratorFuncHead_V
 from corpusIterator_FuncHead_V import CorpusIteratorFuncHead_V
 
 originalDistanceWeights = {}
@@ -159,9 +163,12 @@ def recursivelyLinearize(sentence, position, result, gradients_from_the_left_sum
 
     #  line["children_HD"] = sorted(line["children_HD"], key=lambda x:0 if sentence[x-1]["coarse_dep"] != "nsubj" else 1)
       assert SORT_CHILDREN_BY_LENGTH
+      assert not SORT_HD_SUBJECT_LAST
       line["children_HD"] = sorted(line["children_HD"], key=lambda x:sentence[x-1]["length"])
 
       for child in line["children_HD"]:
+         assert not REORDER_SUBJECT_INTERNAL
+
          assert child > 0
          if "removed" not in sentence[child-1]:
            length = recursivelyLinearize(sentence, child, result, allGradients)
@@ -178,12 +185,6 @@ logsoftmax = torch.nn.LogSoftmax()
 
 
 
-#def orderChildrenRelative(sentence, remainingChildren, reverseSoftmax):
-#       return childrenLinearized
-##       logits = [(x, distanceWeights[stoi_deps[sentence[x-1]["dependency_key"]]]) for x in remainingChildren]
-# #      logits = sorted(logits, key=lambda x:x[1], reverse=(not reverseSoftmax))
-#  #     childrenLinearized = map(lambda x:x[0], logits)
-#   #    return childrenLinearized           
 
 
 
@@ -205,11 +206,7 @@ def orderSentence(sentence, dhLogits, printThings):
             eliminated.append(line)
          continue
 
-     assert not REMOVE_FUNCTIONAL_HEADS
-     # if line["coarse_dep"] in ["aux", "mark", "case", "neg", "cc"]: #.startswith("punct"): # assumes that punctuation does not have non-punctuation dependents!
-     #    if model == "REAL_REAL":
-     #       eliminated.append(line)
-     #    continue
+      assert not REMOVE_FUNCTIONAL_HEADS
 
 
 
@@ -252,6 +249,7 @@ def orderSentence(sentence, dhLogits, printThings):
             assert 0 not in line["children"]
             eliminated = eliminated + [sentence[x-1] for x in line["children"]]
 
+   assert SORT_RECURSIVELY_BY_LENGTH
    recursivelyLength(sentence, root, None, 0)
   
    linearized = []

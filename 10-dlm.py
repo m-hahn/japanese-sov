@@ -12,8 +12,9 @@ model = "REAL_REAL"
 temperature = "Infinity"
 
 REMOVE_FUNCTIONAL_HEADS = False
-REVERSE_SUBJECT = False
+REVERSE_SUBJECT = True
 USE_FUNCHEAD_VERSIOM = False
+SORT_CHILDREN_BY_LENGTH = False
 
 assert temperature == "Infinity"
 
@@ -200,11 +201,7 @@ def orderSentence(sentence, dhLogits, printThings):
             eliminated.append(line)
          continue
 
-     assert not REMOVE_FUNCTIONAL_HEADS
-     # if line["coarse_dep"] in ["aux", "mark", "case", "neg", "cc"]: #.startswith("punct"): # assumes that punctuation does not have non-punctuation dependents!
-     #    if model == "REAL_REAL":
-     #       eliminated.append(line)
-     #    continue
+      assert not REMOVE_FUNCTIONAL_HEADS
 
 
 
@@ -253,16 +250,6 @@ def orderSentence(sentence, dhLogits, printThings):
 
    recursivelyLinearize(sentence, root, linearized, 0)
 
-   #if sentence[0]["word"] != "_":
-     #print " ".join(map(lambda x:x["word"], linearized))
-   #  for line in sentence:        
-  #      if "children" in line:
-#           if line["posUni"] == "VERB":
-     #         print(line["children"])
-    #          print(line["index"] - line["head"], line["coarse_dep"])
- #             assert line["coarse_dep"] == "root" or (line["index"] - line["head"]) < 0
-
-   #           print([(lambda y: (y["coarse_dep"], y["length"], y["index"] < line["index"]))(sentence[x-1]) for x in line["children"] if "removed" not in sentence[x-1]])
                
 
    if model == "REAL_REAL":

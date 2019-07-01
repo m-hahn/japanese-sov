@@ -15,6 +15,15 @@ language = sys.argv[1]
 model = "REAL_REAL"
 temperature = "Infinity"
 
+REMOVE_FUNCTIONAL_HEADS = True
+REVERSE_SUBJECT = False
+USE_FUNCHEAD_VERSIOM = True
+SORT_CHILDREN_BY_LENGTH = True
+REORDER_SUBJECT_INTERNAL = False
+USE_V_VERSION = True
+SORT_HD_SUBJECT_LAST = False
+SORT_RECURSIVELY_BY_LENGTH = True
+
 assert temperature == "Infinity"
 
 myID = random.randint(0,10000000)
@@ -36,7 +45,8 @@ conll_header = ["index", "word", "lemma", "posUni", "posFine", "morph", "head", 
 
 my_fileName = __file__.split("/")[-1]
 
-#from corpusIteratorFuncHead_V import CorpusIteratorFuncHead_V
+assert USE_V_VERSION
+assert USE_FUNCHEAD_VERSIOM
 from corpusIterator_FuncHead_V import CorpusIteratorFuncHead_V
 
 originalDistanceWeights = {}
@@ -134,6 +144,7 @@ def recursivelyLinearize(sentence, position, result, gradients_from_the_left_sum
    line["length"] = 1
    # there are the gradients of its children
    if "children_DH" in line:
+      assert SORT_CHILDREN_BY_LENGTH
       line["children_DH"] = sorted(line["children_DH"], key=lambda x:-sentence[x-1]["length"])
 
       for child in line["children_DH"]:
@@ -150,6 +161,8 @@ def recursivelyLinearize(sentence, position, result, gradients_from_the_left_sum
    #      print(deps)
 
     #  line["children_HD"] = sorted(line["children_HD"], key=lambda x:0 if sentence[x-1]["coarse_dep"] != "nsubj" else 1)
+      assert SORT_CHILDREN_BY_LENGTH
+      assert not SORT_HD_SUBJECT_LAST
       line["children_HD"] = sorted(line["children_HD"], key=lambda x:sentence[x-1]["length"])
 
       for child in line["children_HD"]:
@@ -169,12 +182,6 @@ logsoftmax = torch.nn.LogSoftmax()
 
 
 
-#def orderChildrenRelative(sentence, remainingChildren, reverseSoftmax):
-#       return childrenLinearized
-##       logits = [(x, distanceWeights[stoi_deps[sentence[x-1]["dependency_key"]]]) for x in remainingChildren]
-# #      logits = sorted(logits, key=lambda x:x[1], reverse=(not reverseSoftmax))
-#  #     childrenLinearized = map(lambda x:x[0], logits)
-#   #    return childrenLinearized           
 
 
 
@@ -196,7 +203,7 @@ def orderSentence(sentence, dhLogits, printThings):
             eliminated.append(line)
          continue
 
-
+      assert REMOVE_FUNCTIONAL_HEADS
       if line["coarse_dep"] in ["aux", "mark", "case", "neg", "cc"]: #.startswith("punct"): # assumes that punctuation does not have non-punctuation dependents!
          if model == "REAL_REAL":
             eliminated.append(line)
@@ -212,8 +219,7 @@ def orderSentence(sentence, dhLogits, printThings):
       
      
       direction = "DH" if dhSampled else "HD"
-#      if line["coarse_dep"] == "nsubj":
- #        direction = "HD"
+      assert not REVERSE_SUBJECT
 
 #      if printThings: 
  #        print "\t".join(map(str,["ORD", line["index"], (line["word"]+"           ")[:10], ("".join(list(key)) + "         ")[:22], line["head"], dhSampled, direction, str(1/(1+exp(-dhLogits[key])))[:8], (str(distanceWeights[stoi_deps[key]])+"    ")[:8] , str(originalDistanceWeights[key])[:8]    ]  ))
@@ -242,6 +248,7 @@ def orderSentence(sentence, dhLogits, printThings):
             assert 0 not in line["children"]
             eliminated = eliminated + [sentence[x-1] for x in line["children"]]
 
+   assert SORT_RECURSIVELY_BY_LENGTH
    recursivelyLength(sentence, root, None, 0)
   
    linearized = []
