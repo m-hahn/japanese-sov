@@ -159,7 +159,7 @@ the overall dependency length is minimized by the English order, compared to the
    \begin{deptext}[column sep=1em]
           \japanese{彼女は} \& \japanese{友達に} \& \japanese{会った}  \\
           kanojo-wa \& tomodachi-ni \& atta \\ 
-          she-\textsc{subj} \& friends-\textsc{obj} \& met \\
+          she-\textsc{top} \& friends-\textsc{obj} \& met \\
    \end{deptext}
         %   \deproot{3}{ROOT}
    \depedge{3}{1}{subject}
@@ -183,7 +183,9 @@ We consider the Memory-Surprisal Tradeoff \citep{hahn2019memory}, a purely infor
 
 \section{Basic Sentence Structure in Japanese}
 
+Japanese is a strictly head-final language.
 TODO
+
 
 \section{Experiment 1: Comparison of Dependency Length}
 
@@ -242,6 +244,8 @@ KTC             &   6K   &  64.01 & 65.27 &  7.45\\ \hline
 \subsection{Discussion}
 How does this effect relate to specific dependencies?
 
+TODO examples here
+
 We hypothesize that real orders reduce dependency length between verbs and elements that embed them -- i.e., matrix verbs (\emph{acl}), complementizers (\emph{mark}, \emph{case}), and copulas (\emph{cop}).
 We therefore expect that the lengths of the \emph{acl}, \emph{mark}, \emph{case}, and \emph{cop} dependencies are reduced in real orders.
 
@@ -285,7 +289,7 @@ Regarding increases, we find the strongest mean increases for relations represen
  obj          & 4364  &  0\%     &  0.0266     &0.361 &    4.86  \\
  iobj         & 4068  &  0\%    &  0.611      &2.15  &   18.1   \\
  nummod       & 3676  &  0\%     &  0.000544   &0.0330&    1.000 \\
- advmod       & 2300  &  0.013\%&  1.16       &3.50  &   15.9   \\
+ advmod       & 2300  &  1\%&  1.16       &3.50  &   15.9   \\
  csubj        &  444  &  0\%    &   0.113      &0.696 &    3.41  \\
  ccomp        &  336  &  0\%    &   0.00893    &0.164 &    1.000 \\
  dislocated   &  177  &  0\%    &   5.49       &4.53  &   16.1   \\
