@@ -117,6 +117,12 @@ DLM widely supported, but appears to be at odds with the high typological freque
 We report a corpus-based study of Japanese that tests this.
 \end{abstract}
 
+{\color{red} stats/distribution for Exp1}
+
+{\color{red} viz for Exp2}
+
+{\color{red} more Jap examples}
+
 \section{Introduction}
 
 There has been a suggestion that the typological distribution of word orders reflects a pressure towards efficiency of on-line syntactic processing.
@@ -177,30 +183,42 @@ Second, what is the situation if we consider a more direct formalization of onli
 
 \subsection{Method}
 
-\paragraph{Japanese}
+%\paragraph{Japanese}
+We based our experiments on the Universal Dependencies treebanks.
+Following \cite{futrell2015largescale}, we preprocessed these by promoting functional words (cc, case, cop, mark) to heads.
+We restricted the experiment to the training partitions of each treebank, leaving the held-out partitions for future confirmatory research.
 
-Functional Heads:
+Again following \cite{futrell2015largescale}, we measure the length of a dependency by the number of intervening words.
+The overall dependency length of a sentence is the sum of the lengths of all dependencies in that sentence.
 
-cc: \begin{CJK}{UTF8}{min}と, や\end{CJK} 
+For each sentence in the treebanks, we compared its total dependency length to that of a version to which the following manipulation was applied:
 
-case: doesn't apply to verbs\footnote{https://universaldependencies.org/ja/dep/case.html}
+Any subject, identified as the dependent of an \textit{nsubj} dependency, was moved to the right of its head.
+Heads sometimes have other dependencies to its right side, in particular verbs often have \textit{aux} dependents on the right.
+We ordered the subject after these dependents.
+As subject NPs are mostly longer than auxiliaries (which always consist of one word), this method minimizes dependency length among all ways of placing the subject after the head, and thus biases \emph{against} our hypothesis that SOV worder is optimal for dependency length.
 
-cop: \begin{CJK}{UTF8}{min}だ\end{CJK} 
+This manipulation results in a version of Japanese that has OVS order.
+Since dependency length is left-right invariant, it equally corresponds to an SVO version of Japanese, in which all phrases are strictly head-initial, and only subjects (\textit{nsubj}) and auxiliaries (\textit{aux}) precede their heads.
 
-mark: \begin{CJK}{UTF8}{min}と, か\end{CJK} 
-
-Method for bringing S to the other side: sorting it after the other dependents, as these are short (auxiliaries etc).
-
-\paragraph{English}
 
 \subsection{Results}
+In Table~\ref{tab:depl-resu}, we show the results for the all three corpora.
+In each of the corpora, the overall dependency length is lower on average in the original SOV orders than in counterfactual orders where subject and object are ordered on different sides of the verb.
 
+
+\begin{table}
 \begin{center}
-\begin{tabular}{lllllllll}
-                    &                        & O,S same side   & O, S different sides    \\ \hline\hline
-& Japanese                & 51.81 & 53.24 \\ % (excluding aux)
+\begin{tabular}{l|l|lllllll}
+ Corpus                   &   Sents.                     & O,S same side   & O, S different sides    \\ \hline\hline
+All Corpora     &  54K     & 61.65 & 62.66 \\ \hline
+GSD             &   7K       & 51.64 &  52.92   \\
+BCCWJ           &   41K       &    63.04   & 63.97 \\
+KTC             &   6K   &  64.01 & 65.27 \\ \hline
 \end{tabular}
 \end{center}
+\caption{Dependency Lengths for Japanese. For each corpus, we show the number of sentences, and average overall dependency length for the real orders (O, S on the same side of the verb), and the counterfactual orders (O, S on different sides of the verb).}\label{tab:depl-resu}
+\end{table}
 
 
 %TODO
@@ -293,3 +311,34 @@ FuncHead UD+Aux         & Plain                  & 67.86 & 69.25 \\ % (including
                     & Reordering Siblings    &  TODO     & \\  \hline 
 \end{tabular}
 \end{center}
+
+
+\begin{table}
+\begin{tabular}{l|rlll}
+Name & Words & Available\\ \hline
+GSD     & 184K & full\\
+PUD     & 26K & full\\
+Modern & 14K & full\\
+BCCWJ & 1,237K & POS+deps\\
+KTC & 189K & POS+deps \\
+\end{tabular}
+\end{table}
+
+
+
+
+2.4 total: 54K sentences
+
+Functional Heads:
+
+cc: \begin{CJK}{UTF8}{min}と, や\end{CJK}
+
+case: doesn't apply to verbs\footnote{https://universaldependencies.org/ja/dep/case.html}
+
+cop: \begin{CJK}{UTF8}{min}だ\end{CJK} 
+
+mark: \begin{CJK}{UTF8}{min}と, か\end{CJK} 
+
+Method for bringing S to the other side: sorting it after the other dependents, as these are short (auxiliaries etc).
+
+\paragraph{English}
