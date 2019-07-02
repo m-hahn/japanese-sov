@@ -4,6 +4,11 @@
 
 \usepackage{url}
 
+\usepackage{tikz-dependency}
+
+  \usepackage{natbib}
+  \bibliographystyle{plainnat}
+
 \usepackage{CJKutf8}
 
 %  \usepackage{natbib}
@@ -99,6 +104,7 @@
 \newcommand{\thetad}[0]{{\theta_d}}
 \newcommand{\thetal}[0]{{\theta_{LM}}}
 \newcommand{\thetap}[0]{{\theta_{P}}}
+\newcommand{\japanese}[1]{\begin{CJK}{UTF8}{min}#1\end{CJK}}
 
 
 \title{Dependency Length Minimization and Head-Final Word Order in Japanese}
@@ -113,15 +119,66 @@ We report a corpus-based study of Japanese that tests this.
 
 \section{Introduction}
 
-\section{Data}
+There has been a suggestion that the typological distribution of word orders reflects a pressure towards efficiency of on-line syntactic processing.
 
-\section{Experiment 1: Optimization}
+Prominent among these proposals is the idea that syntactic structures are easier to process if syntactically related words are closer together in the surface string.
 
-recycle QP experiment
+\cite{rijkhoff-word-1986} proposed a principle of `Head Proximity', arguing that, among other things, head nouns tend to be close to the verbs governing them.
 
-here present the optimized grammars side-by-side
+\cite{hawkins2014crosslinguistic} proposes a similar principle 
 
-\section{Experiment 2: Comparison of Dependency Length}
+The principle of Dependency Length Minimization \cite{temperley2018minimizing} is a formalization of these ideas in terms of dependency grammar.
+
+Dependency Length Minimization has been argued to explain the 
+
+Despite the success of Dependency Length Minimization, it appears to be at odds with the prevalence of SOV order:
+
+In a sentence such as
+
+\begin{centering}
+\begin{dependency}[theme = simple]
+   \begin{deptext}[column sep=1em]
+          She \& met \& friends  \\
+   \end{deptext}
+        %   \deproot{3}{ROOT}
+   \depedge{2}{1}{subject}
+   \depedge{2}{3}{object}
+   %\depedge[arc angle=50]{7}{6}{ATT}
+\end{dependency}
+\end{centering}
+
+the overall dependency length is minimized by the English order, compared to the Japanese order
+
+\begin{centering}
+\begin{dependency}[theme = simple]
+   \begin{deptext}[column sep=1em]
+          \japanese{彼女は} \& \japanese{友達に} \& \japanese{会った}  \\
+          kanojo-wa \& tomodachi-ni \& atta \\ 
+          she-\textsc{subj} \& friends-\textsc{obj} \& met \\
+   \end{deptext}
+        %   \deproot{3}{ROOT}
+   \depedge{3}{1}{subject}
+   \depedge{3}{2}{object}
+   %\depedge[arc angle=50]{7}{6}{ATT}
+\end{dependency}
+\end{centering}
+
+
+This paper examines this claim.
+
+First, does the above claim remain true if we consider sentences more complex than the three-word one above?
+In particular, does it remain true if we consider the average dependency length over the distribution of sentences as found in a corpus?
+
+We will address this question by comparing the dependency length of actual Japanese orderings with counterfactual orderings exhibiting SVO order.
+
+Second, what is the situation if we consider a more direct formalization of online memory limitations?
+
+
+\section{Experiment 1: Comparison of Dependency Length}
+
+\subsection{Method}
+
+\paragraph{Japanese}
 
 Functional Heads:
 
@@ -134,6 +191,12 @@ cop: \begin{CJK}{UTF8}{min}だ\end{CJK}
 mark: \begin{CJK}{UTF8}{min}と, か\end{CJK} 
 
 Method for bringing S to the other side: sorting it after the other dependents, as these are short (auxiliaries etc).
+
+\paragraph{English}
+
+\subsection{Results}
+
+
 
 \begin{center}
 \begin{tabular}{lllllllll}
@@ -155,10 +218,66 @@ TODO
 
 - STATISTICAL INFERENCE
 
+\subsection{What causes this?} Embedding
 
-\section{Experiment 2: Comparison of Information Locality}
+\section{Experiment 2: Memory-Surprisal Tradeoff}
 
-A measure of memory load that does not depend on the syntactic analysis
+A measure of memory load that does not depend on the syntactic analysis.
+
+\cite{hahn2019memory}
+
+
+Let $I_t$ be the Conditional Mutual Information of two words $X_0, X_t$ conditioned on the intervening words:
+\begin{equation}
+        \operatorname{I}_t := \operatorname{I}[X_t, X_0 | X_1, \dots, X_{t-1}] = \operatorname{H}[X_t|X_1, \dots, X_{t-1}] - \operatorname{H}[X_t|X_0, \dots, X_{t-1}] 
+\end{equation}
+This quantity, visualized in Figure~\ref{fig:theorem} (a), measures how much predictive information is provided by the next word $X_t$ by the word $t$ steps in the past.
+It is a statistical property of the language, and can be estimated from large-scale text data.
+Our theoretical results describe how the tradeoff between memory and comprehension difficulty relates to $I_t$ (Figure~\ref{fig:theorem} (b)):
+Consider a listener who invests $B$ bits of memory into representing past input.
+We then consider the smallest $T$ such that the area under the curve of $t I_t$, to the left of $T$, has size $B$.
+Such a listener will experience average surprisal at least $H[X_t| X_{<t}] + \sum_{t=T+1}^\infty I_t$. %\note{maybe result first, and then say what $T$ is}
+By tracing out all values $T >0$, one can obtain a bound on the tradeoff curve for any possible listener.
+
+
+
+
+
+
+Based on our theoretical result, we estimated the memory-surprisal tradeoff for 54 human languages.
+We estimated $I_t$ using standard estimation methods for language modeling based on neural networks~\cite{hochreiter-long-1997}.
+
+
+compared
+
+- real orders
+
+- subject placed after aux etc.
+
+
+test which words show the strongest difference
+
+
+\section{Conclusion}
+
+
+\bibliography{literature}
+%\bibliographystyle{acl_natbib}
+
+
+\end{document}
+
+
+
+
+
+\section{Experiment 1: Optimization}
+
+recycle QP experiment
+
+here present the optimized grammars side-by-side
+
+
 
 \section{Experiment 3: What Factors are Responsible?}
 
@@ -169,13 +288,3 @@ A measure of memory load that does not depend on the syntactic analysis
 -- either with auxiliary
 
 -- or with something else
-
-
-
-
-
-\section{Conclusion}
-
-
-
-\end{document}
