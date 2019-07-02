@@ -107,7 +107,7 @@
 \newcommand{\japanese}[1]{\begin{CJK}{UTF8}{min}#1\end{CJK}}
 
 
-\title{Dependency Length Minimization and Basic Word Order in Japanese}
+\title{Dependency Length Minimization and Basic Word Order: A Corpus Study of Japanese}
 \author{Michael Hahn \\ Stanford University \\ mhahn2@stanford.edu}
 \date{\today}
 \begin{document}
@@ -176,8 +176,14 @@ In particular, does it remain true if we consider the average dependency length 
 
 We will address this question by comparing the dependency length of actual Japanese orderings with counterfactual orderings exhibiting SVO order.
 
-Second, what is the situation if we consider a more direct formalization of online memory limitations?
+link between DLM and memory TODO
 
+Second, what is the situation if we consider a more direct formalization of online memory limitations?
+We consider the Memory-Surprisal Tradeoff \citep{hahn2019memory}, a purely information-theoretic bound on memory load in incremental processing that makes no assumption about the encoding of syntactic structure.
+
+\section{Basic Sentence Structure in Japanese}
+
+TODO
 
 \section{Experiment 1: Comparison of Dependency Length}
 
@@ -204,21 +210,25 @@ Since dependency length is left-right invariant, it equally corresponds to an SV
 
 \subsection{Results}
 In Table~\ref{tab:depl-resu}, we show the results for the all three corpora.
+We report average per-sentence dependency lengths for the two conditions.
+We also report the $t$-value for the per-sentence difference between the two conditions.
 In each of the corpora, the overall dependency length is lower on average in the original SOV orders than in counterfactual orders where subject and object are ordered on different sides of the verb.
+The $t$ values indicate that all differences are highly reliable ($p < 0.0001$ in a two-sided $t$-test for the null that the mean difference is $0$).
 
 
 \begin{table}
 \begin{center}
 \begin{tabular}{l|l|lllllll}
- Corpus                   &   Sents.                     & O,S same side   & O, S different sides    \\ \hline\hline
-All Corpora     &  54K     & 61.65 & 62.66 \\ \hline
-GSD             &   7K       & 51.64 &  52.92   \\
-BCCWJ           &   41K       &    63.04   & 63.97 \\
-KTC             &   6K   &  64.01 & 65.27 \\ \hline
+ Corpus                   &   Sents.                     & O,S same side   & O, S different sides  & $t$   \\ \hline\hline
+All Corpora     &  54K     & 61.65 & 62.66 &   15.22   \\ \hline
+GSD             &   7K       & 51.64 &  52.92  &  10.18  \\
+BCCWJ           &   41K       &    63.04   & 63.97 &  11.39  \\
+KTC             &   6K   &  64.01 & 65.27 &  7.45\\ \hline
 \end{tabular}
 \end{center}
 \caption{Dependency Lengths for Japanese. For each corpus, we show the number of sentences, and average overall dependency length for the real orders (O, S on the same side of the verb), and the counterfactual orders (O, S on different sides of the verb).}\label{tab:depl-resu}
 \end{table}
+
 
 
 %TODO
@@ -228,6 +238,63 @@ KTC             &   6K   &  64.01 & 65.27 \\ \hline
 %- STATISTICAL INFERENCE
 
 %\subsection{What causes this?} Embedding
+
+\subsection{Discussion}
+How does this effect relate to specific dependencies?
+
+We hypothesize that real orders reduce dependency length between verbs and elements that embed them -- i.e., matrix verbs (\emph{acl}), complementizers (\emph{mark}, \emph{case}), and copulas (\emph{cop}).
+We therefore expect that the lengths of the \emph{acl}, \emph{mark}, \emph{case}, and \emph{cop} dependencies are reduced in real orders.
+
+We hypothesize that they increase dependency lengths between verbs and those elements that tend to appear to the left of subjects, such as the various types of adverbial modifiers (such as \textit{advmod}, \textit{obl}), and left-dislocated elements (\textit{dislocated}).
+
+We investigated this using the GSD corpus.
+For each dependency type, we calculated how much dependency length is reduced on average by the real orders.
+Results are shown in Figure~\ref{fig:shortened} (for dependencies with overall length reduction) and Figure~\ref{fig:shortened} (for dependencies with overall length increase).
+In agreement with the predictions, we find reliable mean reductions for the \emph{acl}, \emph{mark},\emph{case}, and \emph{cop} dependencies.
+We also find strong reduction for the \emph{nsubj} dependencies.
+
+
+Regarding increases, we find the strongest mean increases for relations representing elements occurring to the left of objects, similar to subjects (\emph{advmod}, \emph{dislocated}, \emph{obl}, \emph{advcl}, \emph{iobj}, \emph{csubj}, \emph{nmod}), in agreement with the predictions.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{l|llllllllll}
+   Dependency  &Number &Reduction     &  Mean   &   SD &       $t$ \\ \hline
+  case & 35257  &  99\% & -0.0402     &0.660  & -11.4   \\
+ compound     &14383  &  100\%     & -0.000139   &0.0118 &  -1.41  \\ 
+ mark  & 7616  &  0.99\% & -1.44       &3.50 &   -35.8   \\
+  nsubj        & 5880  &  67\% & -1.34       &8.69  &  -11.8   \\
+  acl          & 5225  &  100\%     & -0.509      &2.08  &  -17.7   \\
+ cop   & 1843  &  100\%    &  -0.966      &2.70  &  -15.3   \\
+ det          &  705  &  100\%    &  -0.0113     &0.301 &   -1.000 \\
+ amod         &  694  &  100\%    &  -0.0144     &0.380 &   -1.000 \\
+\end{tabular}
+\end{center}
+\caption{Dependencies that are shortened in real orders, compared to counterfactual orders. For each dependency type, we show how many occurrences there are (Number), how often the length is reduced, as opposed to increased (Reduction), the mean change in length (Mean), and the SD and $t$ statistics of the change. Greater absolute values of $t$ indicate more reliable changes in dependency length.}\label{fig:shortened}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{l|llllllllll}
+   Dependency  &Number &Reduction     &  Mean   &   SD &       $t$ \\ \hline
+  aux      &    18395  &  33\% &  0.0000544  &0.0128 &   0.577 \\
+ nmod         &12651  &  2\%&  0.0150     &0.335  &   5.04  \\
+ obl          & 7921  &  0\%     &  0.687      &2.51&     24.4   \\
+  advcl        & 7445  &  33\% &  0.396      &3.24  &   10.5   \\
+ obj          & 4364  &  0\%     &  0.0266     &0.361 &    4.86  \\
+ iobj         & 4068  &  0\%    &  0.611      &2.15  &   18.1   \\
+ nummod       & 3676  &  0\%     &  0.000544   &0.0330&    1.000 \\
+ advmod       & 2300  &  0.013\%&  1.16       &3.50  &   15.9   \\
+ csubj        &  444  &  0\%    &   0.113      &0.696 &    3.41  \\
+ ccomp        &  336  &  0\%    &   0.00893    &0.164 &    1.000 \\
+ dislocated   &  177  &  0\%    &   5.49       &4.53  &   16.1   \\
+\end{tabular}
+\end{center}
+\caption{Dependencies that are lengthened in real orders, compared to counterfactual orders. See Figure~\ref{fig:shortened} for explanation of column names.}\label{fig:lengthened}
+\end{figure}
+
+
 
 \section{Experiment 2: Memory-Surprisal Tradeoff}
 
@@ -249,6 +316,15 @@ By tracing out all values $T >0$, one can obtain a bound on the tradeoff curve f
 
 \paragraph{Setup}
 We estimated $I_t$ using standard estimation methods for language modeling based on neural networks~\citep{hochreiter-long-1997}, as described in \citet{hahn2019memory}.
+
+We could only use the GSD treebank here (7K sentences), as the others come only with POS and dependency annotation, with the original words removed due to copyright restrictions.
+
+We estimate a single model, trained on a version of Japanese where each sentence is either left or manipulated, at random.
+We then evaluate the resulting model separately on held-out data according to the two versions (original or manipulated).
+By controlling for differences between different random initializations, this method increases statistical precision in estimating differences between the two versions of Japanese.
+
+We created 20 models.
+
 
 \paragraph{Results}
 
