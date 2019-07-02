@@ -13,14 +13,22 @@ language = sys.argv[1]
 model = "REAL_REAL"
 temperature = "Infinity"
 
-REMOVE_FUNCTIONAL_HEADS = True
+REMOVE_FUNCTIONAL_HEADS = False
+
+
+
+# these both False or both True
 REVERSE_SUBJECT = False
-USE_FUNCHEAD_VERSION = False
+SORT_HD_SUBJECT_LAST = False
+
+
+
+USE_FUNCHEAD_VERSION = True
 SORT_CHILDREN_BY_LENGTH = False
 REORDER_SUBJECT_INTERNAL = False
 USE_V_VERSION = True
-SORT_HD_SUBJECT_LAST = True
 SORT_RECURSIVELY_BY_LENGTH = False
+USE_FUNCHEAD_VERSION_WITH_AUX = False
 
 assert temperature == "Infinity"
 
@@ -43,9 +51,22 @@ conll_header = ["index", "word", "lemma", "posUni", "posFine", "morph", "head", 
 
 my_fileName = __file__.split("/")[-1]
 
-assert not USE_FUNCHEAD_VERSION
-assert USE_V_VERSION
-from corpusIterator_V import CorpusIterator_V
+if USE_FUNCHEAD_VERSION:
+  if USE_FUNCHEAD_VERSION_WITH_AUX:
+     if USE_V_VERSION:
+       from corpusIterator_FuncHead_V_InclAux import CorpusIteratorFuncHead_V as corpusIteratorClass
+     else:
+       from corpusIterator_FuncHead_InclAux import CorpusIteratorFuncHead as corpusIteratorClass
+  else:
+     if USE_V_VERSION:
+       from corpusIterator_FuncHead_V import CorpusIteratorFuncHead_V as corpusIteratorClass
+     else:
+       from corpusIterator_FuncHead import CorpusIteratorFuncHead as corpusIteratorClass
+else:
+  if USE_V_VERSION:
+     from corpusIterator_V import CorpusIterator_V as corpusIteratorClass
+  else:
+     from corpusIterator import CorpusIterator  as corpusIteratorClass
 
 originalDistanceWeights = {}
 
@@ -63,7 +84,7 @@ def initializeOrderTable():
    distanceCounts = {}
    depsVocab = set()
    for partition in ["train", "dev"]:
-     for sentence in CorpusIterator_V(language,partition, shuffleDataSeed=40).iterator():
+     for sentence in corpusIteratorClass(language,partition, shuffleDataSeed=40).iterator():
       for line in sentence:
           vocab[line["word"]] = vocab.get(line["word"], 0) + 1
           line["coarse_dep"] = makeCoarse(line["dep"])
@@ -99,6 +120,41 @@ import torch
 from torch.autograd import Variable
 
 
+
+# "linearization_logprobability"
+def recursivelyLength(sentence, position, result, gradients_from_the_left_sum):
+   line = sentence[position-1]
+   allGradients = gradients_from_the_left_sum 
+   line["length"] = 1
+   # there are the gradients of its children
+   if "children_DH" in line:
+
+      for child in line["children_DH"]:
+         assert child > 0
+         if "removed" not in sentence[child-1]:
+           length = recursivelyLength(sentence, child, result, allGradients)
+           line["length"] += length
+
+
+   if "children_HD" in line:
+ #     deps = [sentence[x-1]["coarse_dep"] for x in line["children_HD"]]
+  #    if "nsubj" in deps and len(set(deps)) > 1:
+   #      print(deps)
+
+    #  line["children_HD"] = sorted(line["children_HD"], key=lambda x:0 if sentence[x-1]["coarse_dep"] != "nsubj" else 1)
+
+      for child in line["children_HD"]:
+         assert child > 0
+         if "removed" not in sentence[child-1]:
+           length = recursivelyLength(sentence, child, result, allGradients)
+           line["length"] += length
+
+
+
+   return line["length"]
+
+
+
 # "linearization_logprobability"
 def recursivelyLinearize(sentence, position, result, gradients_from_the_left_sum):
    line = sentence[position-1]
@@ -107,7 +163,8 @@ def recursivelyLinearize(sentence, position, result, gradients_from_the_left_sum
    line["length"] = 1
    # there are the gradients of its children
    if "children_DH" in line:
-      assert not SORT_CHILDREN_BY_LENGTH
+      if SORT_CHILDREN_BY_LENGTH:
+         line["children_DH"] = sorted(line["children_DH"], key=lambda x:-sentence[x-1]["length"])
 
       for child in line["children_DH"]:
          assert child > 0
@@ -117,15 +174,17 @@ def recursivelyLinearize(sentence, position, result, gradients_from_the_left_sum
 
    result.append(line)
 
+   line["length_postHead"] = 0
    if "children_HD" in line:
       deps = [sentence[x-1]["coarse_dep"] for x in line["children_HD"]]
       if "nsubj" in deps and len(set(deps)) > 1:
          print(deps)
-      assert not SORT_CHILDREN_BY_LENGTH
-      assert SORT_HD_SUBJECT_LAST
 
+      if SORT_HD_SUBJECT_LAST:
+          line["children_HD"] = sorted(line["children_HD"], key=lambda x:0 if sentence[x-1]["coarse_dep"] != "nsubj" else 1)
+      if SORT_CHILDREN_BY_LENGTH:
+          line["children_HD"] = sorted(line["children_HD"], key=lambda x:sentence[x-1]["length"])
 
-      line["children_HD"] = sorted(line["children_HD"], key=lambda x:0 if sentence[x-1]["coarse_dep"] != "nsubj" else 1)
       for child in line["children_HD"]:
          assert not REORDER_SUBJECT_INTERNAL
 
@@ -133,7 +192,7 @@ def recursivelyLinearize(sentence, position, result, gradients_from_the_left_sum
          if "removed" not in sentence[child-1]:
            length = recursivelyLinearize(sentence, child, result, allGradients)
            line["length"] += length
-
+           line["length_postHead"] += length
 
 
    return line["length"]
@@ -166,11 +225,11 @@ def orderSentence(sentence, dhLogits, printThings):
             eliminated.append(line)
          continue
 
-      assert REMOVE_FUNCTIONAL_HEADS
-      if line["coarse_dep"] in ["aux", "mark", "case", "neg", "cc"]: #, "cop", "dep", "compound"]: #.startswith("punct"): # assumes that punctuation does not have non-punctuation dependents!
-         if model == "REAL_REAL":
-            eliminated.append(line)
-         continue
+      if REMOVE_FUNCTIONAL_HEADS:
+         if line["coarse_dep"] in ["aux", "mark", "case", "neg", "cc"]: #, "cop", "dep", "compound"]: #.startswith("punct"): # assumes that punctuation does not have non-punctuation dependents!
+            if model == "REAL_REAL":
+               eliminated.append(line)
+            continue
 
 
 
@@ -182,9 +241,9 @@ def orderSentence(sentence, dhLogits, printThings):
       
      
       direction = "DH" if dhSampled else "HD"
-      assert not REVERSE_SUBJECT
-#      if line["coarse_dep"] == "sbj":
- #        direction = "HD"
+      if REVERSE_SUBJECT:
+          if line["coarse_dep"] == "nsubj":
+             direction = "HD"
 
 #      if printThings: 
  #        print "\t".join(map(str,["ORD", line["index"], (line["word"]+"           ")[:10], ("".join(list(key)) + "         ")[:22], line["head"], dhSampled, direction, str(1/(1+exp(-dhLogits[key])))[:8], (str(distanceWeights[stoi_deps[key]])+"    ")[:8] , str(originalDistanceWeights[key])[:8]    ]  ))
@@ -213,9 +272,9 @@ def orderSentence(sentence, dhLogits, printThings):
             assert 0 not in line["children"]
             eliminated = eliminated + [sentence[x-1] for x in line["children"]]
 
-   assert not SORT_RECURSIVELY_BY_LENGTH
+   if SORT_RECURSIVELY_BY_LENGTH:
+       recursivelyLength(sentence, root, None, 0)
 
-   
    linearized = []
    recursivelyLinearize(sentence, root, linearized, 0)
 
@@ -260,6 +319,7 @@ def orderSentence(sentence, dhLogits, printThings):
    for i, x in enumerate(linearized):
 #      print x
       moved[x["index"]-1] = i
+      x["reordered_index"] = i+1
  #  print moved
    for i,x in enumerate(linearized):
   #    print x
@@ -387,7 +447,8 @@ def doForwardPass(current):
                        realHead = batchOrdered[j][i-1]["reordered_head"] # this starts at 1, so just right for the purposes here
                     if batchOrdered[j][i-1]["coarse_dep"] == "root":
                        continue
-                    depLength = abs(i - realHead) # - 1 # to be consistent with Richard's stuff
+                    depLength = abs(i - realHead)
+       #             print(depLength, batchOrdered[j][i-1]["word"], batchOrdered[j][realHead-1]["word"], batchOrdered[j][i-1]["coarse_dep"], batchOrdered[j][i-1]["posUni"], batchOrdered[j][realHead-1]["posUni"])
                     assert depLength >= 1
                     totalDepLength += depLength
                     byType.append((batchOrdered[j][i-1]["coarse_dep"], depLength))
@@ -413,7 +474,7 @@ with open(outpath, "w") as outFile:
  print >> outFile, "\t".join(["Sent", "Length"])
  counter = 0
  if True:
-   corpus = CorpusIterator_V(language,"train", shuffleDataSeed=40)
+   corpus = corpusIteratorClass(language,"train", shuffleDataSeed=40)
    corpusIterator = corpus.iterator()
    if corpus.length() == 0:
       quit()
@@ -438,3 +499,4 @@ with open(outpath, "w") as outFile:
  
  
 print(outpath) 
+print(sum(map(lambda x:x[0], depLengths))/float(len(depLengths)))
