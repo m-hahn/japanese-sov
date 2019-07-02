@@ -107,7 +107,7 @@
 \newcommand{\japanese}[1]{\begin{CJK}{UTF8}{min}#1\end{CJK}}
 
 
-\title{Dependency Length Minimization and Head-Final Word Order in Japanese}
+\title{Dependency Length Minimization and Basic Word Order in Japanese}
 \author{Michael Hahn \\ Stanford University \\ mhahn2@stanford.edu}
 \date{\today}
 \begin{document}
@@ -123,13 +123,12 @@ There has been a suggestion that the typological distribution of word orders ref
 
 Prominent among these proposals is the idea that syntactic structures are easier to process if syntactically related words are closer together in the surface string.
 
-\cite{rijkhoff-word-1986} proposed a principle of `Head Proximity', arguing that, among other things, head nouns tend to be close to the verbs governing them.
+\cite{rijkhoff-word-1986} proposed a principle of \emph{Head Proximity}, arguing that, among other things, head nouns tend to be close to the verbs governing them.
+\cite{hawkins2014crosslinguistic} proposes a similar principle of \emph{Domain Minimization}, arguing that languages minimize the distances at which syntactic relations are established in a sentence.
+The principle of \emph{Dependency Length Minimization} \citep{temperley2018minimizing} is a formalization of these ideas in terms of dependency grammar.
 
-\cite{hawkins2014crosslinguistic} proposes a similar principle 
-
-The principle of Dependency Length Minimization \cite{temperley2018minimizing} is a formalization of these ideas in terms of dependency grammar.
-
-Dependency Length Minimization has been argued to explain the 
+Dependency Length Minimization has been argued to explain Greenberg's harmonic correlations \citep{rijkhoff-word-1986, hawkins1994performance}, and certain kinds of exceptions, such as why pronominal objects pattern differently from nominal objects \citep{dryer1992greenbergian}.
+Hawkins (\citep{hawkins2004efficiency, hawkins2007processing, hawkins2014crosslinguistic}) has assembled further evidence in favor of 
 
 Despite the success of Dependency Length Minimization, it appears to be at odds with the prevalence of SOV order:
 
@@ -222,9 +221,7 @@ TODO
 
 \section{Experiment 2: Memory-Surprisal Tradeoff}
 
-A measure of memory load that does not depend on the syntactic analysis.
-
-\cite{hahn2019memory}
+We now turn to a measure of memory load that does not depend on the syntactic analysis, namely the Memory-Surprisal Tradeoff \citep{hahn2019memory}.
 
 
 Let $I_t$ be the Conditional Mutual Information of two words $X_0, X_t$ conditioned on the intervening words:
@@ -247,6 +244,9 @@ By tracing out all values $T >0$, one can obtain a bound on the tradeoff curve f
 Based on our theoretical result, we estimated the memory-surprisal tradeoff for 54 human languages.
 We estimated $I_t$ using standard estimation methods for language modeling based on neural networks~\cite{hochreiter-long-1997}.
 
+\paragraph{Setup}
+
+\paragraph{Results}
 
 compared
 
@@ -259,6 +259,9 @@ test which words show the strongest difference
 
 
 \section{Conclusion}
+We examined the question whether the typological prevalence of SOV order constitutes a problem for the idea that crosslinguistic word order distributions reflect optimization for processing under memory constraints.
+We found that this is not the case: Word orders found in English and Japanese are optimal for the respective languages.
+The results highlight that predictions of efficiency principles for language structure have to be evaluated against specific data from languages, and that they can have language-specific consequences even in domains that are crosslinguistically relevant, such as basic word order.
 
 
 \bibliography{literature}
