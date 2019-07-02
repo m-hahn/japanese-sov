@@ -195,29 +195,21 @@ Method for bringing S to the other side: sorting it after the other dependents, 
 
 \subsection{Results}
 
-
-
 \begin{center}
 \begin{tabular}{lllllllll}
                     &                        & O,S same side   & O, S different sides    \\ \hline\hline
-Ordinary UD         & Plain                  & 53.34 & 53.09\\
-                    & Reordering Siblings    & 45.99 & 48.02 \\ \hline
-Removing FuncWords  & Plain                  & 23.85 & 23.53 \\
-                    & Reordering Siblings    & 19.68 & 20.71 \\ \hline
-FuncHead UD         & Plain                  & 51.81 & 53.24 \\ % (excluding aux)
-                    & Reordering Siblings    &  TODO     &  \\ \hline
-FuncHead UD+Aux         & Plain                  & 67.86 & 69.25 \\ % (including aux) TODO this faces the problem that stacked AUX might be analyzed in the wrong order
-                    & Reordering Siblings    &  TODO     & \\  \hline 
+& Japanese                & 51.81 & 53.24 \\ % (excluding aux)
 \end{tabular}
 \end{center}
 
-TODO
 
-- COMPARISON TO ENGLISH
+%TODO
 
-- STATISTICAL INFERENCE
+%- COMPARISON TO ENGLISH
 
-\subsection{What causes this?} Embedding
+%- STATISTICAL INFERENCE
+
+%\subsection{What causes this?} Embedding
 
 \section{Experiment 2: Memory-Surprisal Tradeoff}
 
@@ -237,14 +229,8 @@ Such a listener will experience average surprisal at least $H[X_t| X_{<t}] + \su
 By tracing out all values $T >0$, one can obtain a bound on the tradeoff curve for any possible listener.
 
 
-
-
-
-
-Based on our theoretical result, we estimated the memory-surprisal tradeoff for 54 human languages.
-We estimated $I_t$ using standard estimation methods for language modeling based on neural networks~\cite{hochreiter-long-1997}.
-
 \paragraph{Setup}
+We estimated $I_t$ using standard estimation methods for language modeling based on neural networks~\citep{hochreiter-long-1997}, as described in \citet{hahn2019memory}.
 
 \paragraph{Results}
 
@@ -291,3 +277,19 @@ here present the optimized grammars side-by-side
 -- either with auxiliary
 
 -- or with something else
+
+
+
+\begin{center}
+\begin{tabular}{lllllllll}
+                    &                        & O,S same side   & O, S different sides    \\ \hline\hline
+Ordinary UD         & Plain                  & 53.34 & 53.09\\
+                    & Reordering Siblings    & 45.99 & 48.02 \\ \hline
+Removing FuncWords  & Plain                  & 23.85 & 23.53 \\
+                    & Reordering Siblings    & 19.68 & 20.71 \\ \hline
+FuncHead UD         & Plain                  & 51.81 & 53.24 \\ % (excluding aux)
+                    & Reordering Siblings    &  TODO     &  \\ \hline
+FuncHead UD+Aux         & Plain                  & 67.86 & 69.25 \\ % (including aux) TODO this faces the problem that stacked AUX might be analyzed in the wrong order
+                    & Reordering Siblings    &  TODO     & \\  \hline 
+\end{tabular}
+\end{center}
