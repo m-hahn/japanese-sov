@@ -414,8 +414,13 @@ Regarding increases, we find the strongest mean increases for relations represen
 
 \section{Experiment 2: Memory-Surprisal Tradeoff}
 
-We now turn to a measure of memory load that does not depend on the syntactic analysis, namely the Memory-Surprisal Tradeoff \citep{hahn2019memory}.
+In Experiment 1, we found that Dependency Length Minimization, applied to syntactic structures of Japanese as found in dependency treebanks, favors the observed SOV order over counterfactual SVO-like orders.
+However, dependency length presupposes a specific representation format of syntactic structures, and may not be robust to different versions of dependency grammar.
+The results from Experiment 1 might therefore be dependent on the analysis choices expressed in Universal Dependencies annotation.
 
+Furthermore, dependency length does not directly reflect any psycholinguistically grounded quantity, as actual processing effort induced by long dependencies is neither linear in length, nor independent of factors such as the intervening words and the type of dependency \citep{gibson1998linguistic,lewis-activation-based-2005,demberg-data-2008}.
+
+To address these concerns, we now turn to a measure of memory load that does not depend on the syntactic analysis, namely the Memory-Surprisal Tradeoff \citep{hahn2019memory}.
 The idea is that listeners maintaing imperfect memory of the input will incur higher surprisal.
 This results in a tradeoff between memory and surprisal.
 Languages enable more efficient processing under memory limitations if this tradeoff curve is more favorable, that is, if a listener with any fixed memory budget can achieve low surprisal.
