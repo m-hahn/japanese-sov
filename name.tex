@@ -74,6 +74,7 @@
 %\usepackage{natbib}
 \usepackage{amssymb}
 
+\usepackage{linguex}
 
 \usepackage{amsthm}
  
@@ -107,34 +108,37 @@
 \newcommand{\japanese}[1]{\begin{CJK}{UTF8}{min}#1\end{CJK}}
 
 
-\title{Dependency Length Minimization and Basic Word Order in Japanese}
+\title{Dependency Length Minimization and Basic Word Order: A Corpus Study of Japanese}
 \author{Michael Hahn \\ Stanford University \\ mhahn2@stanford.edu}
 \date{\today}
 \begin{document}
 \maketitle
 \begin{abstract}
-DLM widely supported, but appears to be at odds with the high typological frequency of SOV and VSO orders.
+The principle of Dependency Length Minimization holds that languages tend to exhibit word orders that reduce the length of syntactic dependencies.
+Evidence for this hypothesis has been found in data from many languages, and it has been argued to accurately predict many phenomena across languages.
+However, it appears to be at odds with the high typological frequency of SOV and VSO orders, as SVO orders would seem to provide shorter dependencies between verbs and their arguments.
 We report a corpus-based study of Japanese that tests this.
+In Study 1, we compare dependency lengths in real Japanese corpus data with a counterfactual SVO-like version of Japanese.
+Results show that real Japanese with SOV order has shorter dependencies than the counterfactual SVO version.
+In Study 2, we replicate this result using the Memory-Surprisal tradeoff, an information-theoretic measure of memory load in sentence processing that makes no assumptions about the format of syntactic representations. 
+Taken together, the results show that the typological frequency of SOV is compatible with principles such as Dependency Length Minimization.
 \end{abstract}
+
 
 \section{Introduction}
 
 There has been a suggestion that the typological distribution of word orders reflects a pressure towards efficiency of on-line syntactic processing.
-
 Prominent among these proposals is the idea that syntactic structures are easier to process if syntactically related words are closer together in the surface string.
-
 \cite{rijkhoff-word-1986} proposed a principle of \emph{Head Proximity}, arguing that, among other things, head nouns tend to be close to the verbs governing them.
 \cite{hawkins2014crosslinguistic} proposes a similar principle of \emph{Domain Minimization}, arguing that languages minimize the distances at which syntactic relations are established in a sentence.
 The principle of \emph{Dependency Length Minimization} \citep{temperley2018minimizing} is a formalization of these ideas in terms of dependency grammar.
 
 Dependency Length Minimization has been argued to explain Greenberg's harmonic correlations \citep{rijkhoff-word-1986, hawkins1994performance}, and certain kinds of exceptions, such as why pronominal objects pattern differently from nominal objects \citep{dryer1992greenbergian}.
-Hawkins (\citep{hawkins2004efficiency, hawkins2007processing, hawkins2014crosslinguistic}) has assembled further evidence in favor of 
+Hawkins (\citep{hawkins2004efficiency, hawkins2007processing, hawkins2014crosslinguistic}) has assembled further evidence that such principles predict specific word order facts in many languages.
 
-Despite the success of Dependency Length Minimization, it appears to be at odds with the prevalence of SOV order:
+Despite the success of Dependency Length Minimization, it appears to be at odds with the prevalence of SOV order: In a sentence such as
 
-In a sentence such as
-
-\begin{centering}
+\ex.
 \begin{dependency}[theme = simple]
    \begin{deptext}[column sep=1em]
           She \& met \& friends  \\
@@ -144,118 +148,335 @@ In a sentence such as
    \depedge{2}{3}{object}
    %\depedge[arc angle=50]{7}{6}{ATT}
 \end{dependency}
-\end{centering}
 
-the overall dependency length is minimized by the English order, compared to the Japanese order
-
-\begin{centering}
+the overall dependency length is minimized by the English order, compared to SOV order as found in the Japanese
+\ex.
 \begin{dependency}[theme = simple]
    \begin{deptext}[column sep=1em]
           \japanese{彼女は} \& \japanese{友達に} \& \japanese{会った}  \\
           kanojo-wa \& tomodachi-ni \& atta \\ 
-          she-\textsc{subj} \& friends-\textsc{obj} \& met \\
+          she-\textsc{top} \& friends-\textsc{obj} \& met \\
    \end{deptext}
         %   \deproot{3}{ROOT}
    \depedge{3}{1}{subject}
    \depedge{3}{2}{object}
    %\depedge[arc angle=50]{7}{6}{ATT}
 \end{dependency}
-\end{centering}
 
 
-This paper examines this claim.
+This paper examines this claim, asking whether the prevalence of SOV orders constitutes a challenge for Dependency Length Minimization.
 
 First, does the above claim remain true if we consider sentences more complex than the three-word one above?
 In particular, does it remain true if we consider the average dependency length over the distribution of sentences as found in a corpus?
-
 We will address this question by comparing the dependency length of actual Japanese orderings with counterfactual orderings exhibiting SVO order.
 
+
 Second, what is the situation if we consider a more direct formalization of online memory limitations?
+While Dependency Length Minimization is agreed to reflect working memory limitations in incremental processing \citep{hawkins1994performance, futrell2015largescale, temperley2018minimizing}, it does not directly formalize any psycholinguistically grounded quantity.
+The actual, experimentally measured, processing effort induced by long dependencies is not a linear function of dependency length \citep{gibson1998linguistic}, and depends on intervening elements \citep{gibson1998linguistic, lewis-activation-based-2005} and the types of dependencies \citep{demberg-data-2008}.
+We consider the Memory-Surprisal Tradeoff \citep{hahn2019memory}, a purely information-theoretic bound on memory load in incremental processing that makes no assumption about the encoding of syntactic structure.
+In Experiment 2, we test whether SOV order as found in Japanese results in more efficient memory-surprisal tradeoffs than a hypothetical SVO version.
+
+\paragraph{Basic Sentence Structure in Japanese}
+This paragraph will review basic facts about Japanese word order, serving as the background for the two corpus experiments.
+Japanese is a strictly head-final language. The unmarked order is SOV; subjects, objects, and other modifiers all precede the verb.
+NP dependents are marked with a case marker or postposition; for instance, \emph{ga} marks nominative, \emph{o} marks accusative, and \emph{wa} marks topics:
+
+%\begin{huge}
+%\textcolor{red}{TODO Japanese examples here}
+%\end{huge}
+
+\exg. [kodomo-tachi ga] [ano kooen de] [yakyuu o] suru \\
+child-\textsc{pl} \textsc{nom} that park \textsc{loc} baseball \textsc{acc} do \\
+`Children play baseball in that park' \citep[p. 118]{iwasaki2013japanese}
+
+Tense, aspect, and mood markers follow the verb.
+These elements are suffixes, though they are annotated as individual words in Universal Dependencies:
+
+\exg. [taroo ga] [ki o] taoshi-te-iru \\
+Taro \textsc{nom} tree \textsc{acc} make.fall-\textsc{suff}-\textsc{asp:nopast} \\
+`Taro is felling the tree' \citep[p. 138]{iwasaki2013japanese} \label{ex:taro-tree}
+
+In terms of Universal Dependencies, this would be rendered as follows:
+\ex.
+\begin{dependency}[theme = simple]
+   \begin{deptext}[column sep=1em]
+          \japanese{太郎} \& \japanese{が} \& \japanese{木} \& \japanese{を} \& \japanese{倒} \& \japanese{し} \& \japanese{て} \& \japanese{いる} \\
+          taroo \& ga \& ki \& o \& tao \& shi \&te \& iru \\ 
+   \end{deptext}
+        %   \deproot{3}{ROOT}
+   \depedge{1}{2}{case}
+   \depedge{3}{4}{case}
+   \depedge{5}{1}{nsubj}
+   \depedge{5}{3}{obj}
+   \depedge{5}{6}{aux}
+   \depedge{5}{7}{mark}
+   \depedge{5}{8}{aux}
+   %\depedge[arc angle=50]{7}{6}{ATT}
+\end{dependency}\label{ex:taro-tree-tree}
+
+In accordance with the head-final order, all embedded clauses precede the verb; complementizers follow verbs, such as \textit{to} in this example:
+\ex.
+\begin{dependency}[theme = simple]
+   \begin{deptext}[column sep=1em]
+\japanese{太郎} \& \japanese{は} \& \japanese{花子} \& \japanese{が} \& \japanese{家出} \& \japanese{し} \& \japanese{た} \& \japanese{と} \& \japanese{嘆い} \& \japanese{た} \\
+          taroo \& wa \& hanako \& ga \& iede \& shi \& ta \& to \& nagei \& ta \\ 
+          Taro \& \textsc{top} \& Hanako \& \textsc{nom} \& leave.home \& do \& \textsc{past} \& \textsc{comp} \& grieve \& \textsc{past} \\
+   \end{deptext}
+   \depedge{9}{1}{nsubj}
+   \depedge{1}{2}{case}
+   \depedge{5}{3}{nsubj}
+   \depedge{3}{4}{case}
+   \depedge{5}{6}{aux}
+   \depedge{5}{7}{aux}
+   \depedge{5}{8}{mark}
+   \depedge{9}{5}{xcomp}
+   \depedge{9}{10}{aux}
+   %\depedge[arc angle=50]{7}{6}{ATT}
+\end{dependency}
+`Taro grieved that Hanako had run away from home.' \citep[p. 224]{iwasaki2013japanese}\label{ex:hanako-ran}
+
 
 
 \section{Experiment 1: Comparison of Dependency Length}
 
 \subsection{Method}
 
-\paragraph{Japanese}
+%\paragraph{Japanese}
+We based our experiments on the Universal Dependencies treebanks.
+Following \cite{futrell2015largescale}, we preprocessed these by promoting functional words (cc, case, cop, mark) to heads.
+For instance, the example (\ref{ex:taro-tree}) above is converted as follows:
+\ex.
+\begin{dependency}[theme = simple]
+   \begin{deptext}[column sep=1em]
+          \japanese{太郎} \& \japanese{が} \& \japanese{木} \& \japanese{を} \& \japanese{倒} \& \japanese{し} \& \japanese{て} \& \japanese{いる} \\
+          taroo \& ga \& ki \& o \& tao \& shi \&te \& iru \\ 
+   \end{deptext}
+        %   \deproot{3}{ROOT}
+   \depedge{2}{1}{case}
+   \depedge{4}{3}{case}
+   \depedge{5}{2}{nsubj}
+   \depedge{5}{4}{obj}
+   \depedge{5}{6}{aux}
+   \depedge{7}{5}{mark}
+   \depedge{5}{8}{aux}
+   %\depedge[arc angle=50]{7}{6}{ATT}
+\end{dependency}
 
-Functional Heads:
 
-cc: \begin{CJK}{UTF8}{min}と, や\end{CJK} 
+We restricted the experiment to the training partitions of each treebank, leaving the held-out partitions for future confirmatory research.
 
-case: doesn't apply to verbs\footnote{https://universaldependencies.org/ja/dep/case.html}
+Again following \cite{futrell2015largescale}, we measure the length of a dependency by the number of intervening words.
+The overall dependency length of a sentence is the sum of the lengths of all dependencies in that sentence.
 
-cop: \begin{CJK}{UTF8}{min}だ\end{CJK} 
+For each sentence in the treebanks, we compared its total dependency length to that of a version to which the following manipulation was applied:
 
-mark: \begin{CJK}{UTF8}{min}と, か\end{CJK} 
+Any subject, identified as the dependent of an \textit{nsubj} dependency, was moved to the right of its head.
+Heads sometimes have other dependencies to its right side, in particular verbs often have \textit{aux} dependents on the right.
+We ordered the subject after these dependents.
+As subject NPs are mostly longer than auxiliaries (which always consist of one word), this method minimizes dependency length among all ways of placing the subject after the head, and thus biases \emph{against} our hypothesis that SOV worder is optimal for dependency length.
+For instance, the example (\ref{ex:taro-tree}) above would become
+\exg.  [ki o] taoshi-te-iru [taroo ga] \\
+ tree \textsc{acc} make.fall-\textsc{suff}-\textsc{asp:nopast} Taro \textsc{nom}\\
 
-Method for bringing S to the other side: sorting it after the other dependents, as these are short (auxiliaries etc).
+\ex.
+\begin{dependency}[theme = simple]
+   \begin{deptext}[column sep=1em]
+          \japanese{木} \& \japanese{を} \& \japanese{倒} \& \japanese{し} \& \japanese{て} \& \japanese{いる} \&  \japanese{太郎} \& \japanese{が}\\
+          ki \& o \& tao \& shi \&te \& iru \& taroo \& ga\\ 
+   \end{deptext}
+        %   \deproot{3}{ROOT}
+   \depedge{8}{7}{case}
+   \depedge{3}{8}{nsubj}
+   \depedge{2}{1}{case}
+   \depedge{3}{2}{obj}
+   \depedge{3}{4}{aux}
+   \depedge{5}{3}{mark}
+   \depedge{3}{6}{aux}
+   %\depedge[arc angle=50]{7}{6}{ATT}
+\end{dependency}\label{ex:taro-tree-tree-counter}
 
-\paragraph{English}
+
+
+\ref{ex:hanako-ran} is converted to the counterfactual version
+\ex.
+\begin{dependency}[theme = simple]
+   \begin{deptext}[column sep=1em]
+ \japanese{家出} \& \japanese{し} \& \japanese{た} \& \japanese{花子} \& \japanese{が} \& \japanese{と} \& \japanese{嘆い} \& \japanese{た} \& \japanese{太郎} \& \japanese{は}\\
+           iede \& shi \& ta \& hanako \& ga \& to \& nagei \& ta \& taroo \& wa\\ 
+   \end{deptext}
+   \depedge{7}{10}{nsubj}
+   \depedge{10}{9}{case}
+   \depedge{1}{5}{nsubj}
+   \depedge{5}{4}{case}
+   \depedge{1}{2}{aux}
+   \depedge{1}{3}{aux}
+   \depedge{6}{1}{mark}
+   \depedge{7}{6}{xcomp}
+   \depedge{7}{8}{aux}
+   %\depedge[arc angle=50]{7}{6}{ATT}
+\end{dependency}
+`Taro grieved that Hanako had run away from home.' \citep[p. 224]{iwasaki2013japanese}\label{ex:hanako-ran-counter}
+
+
+This manipulation results in a version of Japanese that has OVS order.
+Since dependency length is left-right invariant, it equally corresponds to an SVO version of Japanese, in which all phrases are strictly head-initial, and only subjects (\textit{nsubj}) and auxiliaries (\textit{aux}) precede their heads.
+
+
+We first discuss under what circumstances we expect real or counterfactual Japanese lead to shorter dependency lengths.
+
+Comparison of \ref{ex:taro-tree-tree} and \ref{ex:taro-tree-tree-counter} suggests that, first, counterfactual orders will result in longer dependencies if there are many postverbal suffixes: The \textit{nsubj} dependency will be lengthened if the number of suffixes to the verb -- plus the length of the subject NP itself -- outweigh the number of words that intervene between subject and verb in real SOV orders, such as object NPs.
+On the other hand, the length of the \textit{nsubj} dependency can be shortened if there are long constituents intervening in the SOV order, as in \ref{ex:hanako-ran}, where the subject \textit{taroo-wa} is separated from the verb by an embedded clause.
+If subjects \emph{follow} other constituents depending on the verb, these dependenvies will be shortened in counterfactual orders.
+
+Second, comparison of \ref{ex:hanako-ran} and \ref{ex:hanako-ran-counter} shows that dependencies between complementizers and embedded verbs will be lengthened if the subject intervenes, as in \ref{ex:hanako-ran-counter}.
+
+Clearly, which of the two orders results in shorter overall dependency lengths will depend on the relative distributions of different configurations in corpus data.
 
 \subsection{Results}
+In Table~\ref{tab:depl-resu}, we show the results for the all three corpora.
+We report average per-sentence dependency lengths for the two conditions.
+We also report the $t$-value for the per-sentence difference between the two conditions.
+In each of the corpora, the overall dependency length is lower on average in the original SOV orders than in counterfactual orders where subject and object are ordered on different sides of the verb.
+The $t$ values indicate that all differences are highly reliable ($p < 0.0001$ in a two-sided $t$-test for the null that the mean difference is $0$).
 
 
-
+\begin{table}
 \begin{center}
-\begin{tabular}{lllllllll}
-                    &                        & O,S same side   & O, S different sides    \\ \hline\hline
-Ordinary UD         & Plain                  & 53.34 & 53.09\\
-                    & Reordering Siblings    & 45.99 & 48.02 \\ \hline
-Removing FuncWords  & Plain                  & 23.85 & 23.53 \\
-                    & Reordering Siblings    & 19.68 & 20.71 \\ \hline
-FuncHead UD         & Plain                  & 51.81 & 53.24 \\ % (excluding aux)
-                    & Reordering Siblings    &  TODO     &  \\ \hline
-FuncHead UD+Aux         & Plain                  & 67.86 & 69.25 \\ % (including aux) TODO this faces the problem that stacked AUX might be analyzed in the wrong order
-                    & Reordering Siblings    &  TODO     & \\  \hline 
+\begin{tabular}{l|l|lllllll}
+ Corpus                   &   Sents.                     & O,S same side   & O, S different sides  & $t$   \\ \hline\hline
+All Corpora     &  54K     & 61.65 & 62.66 &   15.22   \\ \hline
+GSD             &   7K       & 51.64 &  52.92  &  10.18  \\
+BCCWJ           &   41K       &    63.04   & 63.97 &  11.39  \\
+KTC             &   6K   &  64.01 & 65.27 &  7.45\\ \hline
 \end{tabular}
 \end{center}
+\caption{Dependency Lengths for Japanese. For each corpus, we show the number of sentences, and average overall dependency length for the real orders (O, S on the same side of the verb), and the counterfactual orders (O, S on different sides of the verb).}\label{tab:depl-resu}
+\end{table}
 
-TODO
 
-- COMPARISON TO ENGLISH
 
-- STATISTICAL INFERENCE
+\subsection{Discussion}
+How does this effect relate to specific dependencies?
+As discussed above, we hypothesize that real orders reduce dependency length between verbs and elements that embed them -- i.e., matrix verbs (\emph{acl}), complementizers (\emph{mark}, \emph{case}), and copulas (\emph{cop}).
+We therefore expect that the lengths of the \emph{acl}, \emph{mark}, \emph{case}, and \emph{cop} dependencies are reduced in real orders.
 
-\subsection{What causes this?} Embedding
+Furthermore, as discussed above, we hypothesize that they increase dependency lengths between verbs and those elements that tend to appear to the left of subjects, such as the various types of adverbial modifiers (such as \textit{advmod}, \textit{obl}), and left-dislocated elements (\textit{dislocated}).
+
+We investigated this using the GSD corpus.
+For each dependency type, we calculated how much dependency length is reduced on average by the real orders.
+Results are shown in Figure~\ref{fig:shortened} (for dependencies with overall length reduction) and Figure~\ref{fig:shortened} (for dependencies with overall length increase).
+In agreement with the predictions, we find reliable mean reductions for the \emph{acl}, \emph{mark},\emph{case}, and \emph{cop} dependencies.
+We also find strong reduction for the \emph{nsubj} dependencies.
+
+
+Regarding increases, we find the strongest mean increases for relations representing elements occurring to the left of objects, similar to subjects (\emph{advmod}, \emph{dislocated}, \emph{obl}, \emph{advcl}, \emph{iobj}, \emph{csubj}, \emph{nmod}), in agreement with the predictions.
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{l|llllllllll}
+   Dependency  &Number &Reduction     &  Mean   &   SD &       $t$ \\ \hline
+  case & 35257  &  99\% & -0.0402     &0.660  & -11.4   \\
+ compound     &14383  &  100\%     & -0.000139   &0.0118 &  -1.41  \\ 
+ mark  & 7616  &  0.99\% & -1.44       &3.50 &   -35.8   \\
+  nsubj        & 5880  &  67\% & -1.34       &8.69  &  -11.8   \\
+  acl          & 5225  &  100\%     & -0.509      &2.08  &  -17.7   \\
+ cop   & 1843  &  100\%    &  -0.966      &2.70  &  -15.3   \\
+ det          &  705  &  100\%    &  -0.0113     &0.301 &   -1.000 \\
+ amod         &  694  &  100\%    &  -0.0144     &0.380 &   -1.000 \\
+\end{tabular}
+\end{center}
+\caption{Dependencies that are shortened in real orders, compared to counterfactual orders. For each dependency type, we show how many occurrences there are (Number), how often the length is reduced, as opposed to increased (Reduction), the mean change in length (Mean), and the SD and $t$ statistics of the change. Greater absolute values of $t$ indicate more reliable changes in dependency length.}\label{fig:shortened}
+\end{figure}
+
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{l|llllllllll}
+   Dependency  &Number &Reduction     &  Mean   &   SD &       $t$ \\ \hline
+  aux      &    18395  &  33\% &  0.0000544  &0.0128 &   0.577 \\
+ nmod         &12651  &  2\%&  0.0150     &0.335  &   5.04  \\
+ obl          & 7921  &  0\%     &  0.687      &2.51&     24.4   \\
+  advcl        & 7445  &  33\% &  0.396      &3.24  &   10.5   \\
+ obj          & 4364  &  0\%     &  0.0266     &0.361 &    4.86  \\
+ iobj         & 4068  &  0\%    &  0.611      &2.15  &   18.1   \\
+ nummod       & 3676  &  0\%     &  0.000544   &0.0330&    1.000 \\
+ advmod       & 2300  &  1\%&  1.16       &3.50  &   15.9   \\
+ csubj        &  444  &  0\%    &   0.113      &0.696 &    3.41  \\
+ ccomp        &  336  &  0\%    &   0.00893    &0.164 &    1.000 \\
+ dislocated   &  177  &  0\%    &   5.49       &4.53  &   16.1   \\
+\end{tabular}
+\end{center}
+\caption{Dependencies that are lengthened in real orders, compared to counterfactual orders. See Figure~\ref{fig:shortened} for explanation of column names.}\label{fig:lengthened}
+\end{figure}
+
+
 
 \section{Experiment 2: Memory-Surprisal Tradeoff}
 
-We now turn to a measure of memory load that does not depend on the syntactic analysis, namely the Memory-Surprisal Tradeoff \citep{hahn2019memory}.
+In Experiment 1, we found that Dependency Length Minimization, applied to syntactic structures of Japanese as found in dependency treebanks, favors the observed SOV order over counterfactual SVO-like orders.
+However, dependency length presupposes a specific representation format of syntactic structures, and may not be robust to different versions of dependency grammar.
+The results from Experiment 1 might therefore be dependent on the analysis choices expressed in Universal Dependencies annotation.
 
+Furthermore, dependency length does not directly reflect any psycholinguistically grounded quantity, as actual processing effort induced by long dependencies is neither linear in length, nor independent of factors such as the intervening words and the type of dependency \citep{gibson1998linguistic,lewis-activation-based-2005,demberg-data-2008}.
 
-Let $I_t$ be the Conditional Mutual Information of two words $X_0, X_t$ conditioned on the intervening words:
+To address these concerns, we now turn to a measure of memory load that does not depend on the syntactic analysis, namely the Memory-Surprisal Tradeoff \citep{hahn2019memory}.
+The idea is that listeners maintaing imperfect memory of the input will incur higher surprisal.
+This results in a tradeoff between memory and surprisal.
+Languages enable more efficient processing under memory limitations if this tradeoff curve is more favorable, that is, if a listener with any fixed memory budget can achieve low surprisal.
+
+This tradeoff can be estimated using information-theoretic bounds that are independent of assumptions about how syntactic structure is encoded \citep{hahn2019memory}.
+For any $t = 1, 2, \dots$, let $I_t$ be the Conditional Mutual Information of two words $X_0, X_t$ conditioned on the intervening words:
 \begin{equation}
         \operatorname{I}_t := \operatorname{I}[X_t, X_0 | X_1, \dots, X_{t-1}] = \operatorname{H}[X_t|X_1, \dots, X_{t-1}] - \operatorname{H}[X_t|X_0, \dots, X_{t-1}] 
 \end{equation}
-This quantity, visualized in Figure~\ref{fig:theorem} (a), measures how much predictive information is provided by the next word $X_t$ by the word $t$ steps in the past.
-It is a statistical property of the language, and can be estimated from large-scale text data.
-Our theoretical results describe how the tradeoff between memory and comprehension difficulty relates to $I_t$ (Figure~\ref{fig:theorem} (b)):
-Consider a listener who invests $B$ bits of memory into representing past input.
-We then consider the smallest $T$ such that the area under the curve of $t I_t$, to the left of $T$, has size $B$.
-Such a listener will experience average surprisal at least $H[X_t| X_{<t}] + \sum_{t=T+1}^\infty I_t$. %\note{maybe result first, and then say what $T$ is}
+This quantity  measures how much predictive information is provided by the next word $X_t$ by the word $t$ steps in the past.
+It is a statistical property of the language, and can be estimated from text data.
+
+\citet{hahn2019memory} show that a listener investing at most $\sum_{t=1}^T t I_t$ bits of memory will incur average surprisal at least $H[X_t| X_{<t}] + \sum_{t=T+1}^\infty I_t$.
 By tracing out all values $T >0$, one can obtain a bound on the tradeoff curve for any possible listener.
 
-
-
-
-
-
-Based on our theoretical result, we estimated the memory-surprisal tradeoff for 54 human languages.
-We estimated $I_t$ using standard estimation methods for language modeling based on neural networks~\cite{hochreiter-long-1997}.
-
 \paragraph{Setup}
+We estimated the Conditional Mutual Information $I_t$ (for $t=1,2,\dots,20$) using standard estimation methods for language modeling based on neural networks~\citep{hochreiter-long-1997}, as described in \citet{hahn2019memory}.
+We then used the theoretical result described above to compute memory-surprisal tradeoff curves of real and counterfactual orderings.
+
+We could only use the GSD treebank here (7K sentences), as the others come only with POS and dependency annotation, with the original words removed due to copyright restrictions.
+
+We estimate a single model for both versions (real and counterfactual), trained on a version of Japanese where each sentence is either left unachanged or manipulated, at random.
+We then evaluate the resulting model separately on held-out data according to the two versions (original or manipulated).
+By controlling for differences between different random initializations, this method increases statistical precision in estimating differences between the two versions of Japanese.
+We estimated 20 such models to control for differences between random initializations.
+
+We also conducted an analogous study for English.
+It might be that SOV orders improve memory-surprisal tradeoffs across languages.
+Repeating the study for English controls for this:
+We predict that SVO order actually found in English will provide more favorable memory-surprisal tradeoffs than counterfactual SOV orders.
+We use the Penn Treebank~\citep{marcus-building-1993}.
+For counterfactual orders, we order subject NPs (\texttt{NP-SBJ}) after VPs (\texttt{VP}), producing VOS order.
+Again, since the memory-surprisal tradeoff curves are left-right invariant, this is equivalent to SOV order.
+
 
 \paragraph{Results}
 
-compared
-
-- real orders
-
-- subject placed after aux etc.
+Results are shown for Japanese in Figure~\ref{fig:memsurp-jap}, and for English in Figure~\ref{fig:memsurp-ptb}.
+In both languages, the real orders show better memory-surprisal tradeoffs than the counterfactual ones, in every one of the 20 runs of the LSTM language model.
 
 
-test which words show the strongest difference
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/japanese-memsurp.pdf}
+\caption{Memory-surprisal tradeoff for Japanese, for the 20 runs of the language model. Dark blue: real orders (object and subject on the same side of the verb). Light blue: counterfactual orders (object and subject on different sides of the verb).}\label{fig:memsurp-jap}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{figures/ptb-memsurp.pdf}
+\caption{Memory-surprisal tradeoff for English (Penn Treebank), for the 20 runs of the language model. Dark blue: real orders (object and subject on the different sides of the verb). Light blue: counterfactual orders (object and subject on the same side of the verb).}\label{fig:memsurp-ptb}
+\end{figure}
+
 
 
 \section{Conclusion}
@@ -291,3 +512,50 @@ here present the optimized grammars side-by-side
 -- either with auxiliary
 
 -- or with something else
+
+
+
+\begin{center}
+\begin{tabular}{lllllllll}
+                    &                        & O,S same side   & O, S different sides    \\ \hline\hline
+Ordinary UD         & Plain                  & 53.34 & 53.09\\
+                    & Reordering Siblings    & 45.99 & 48.02 \\ \hline
+Removing FuncWords  & Plain                  & 23.85 & 23.53 \\
+                    & Reordering Siblings    & 19.68 & 20.71 \\ \hline
+FuncHead UD         & Plain                  & 51.81 & 53.24 \\ % (excluding aux)
+                    & Reordering Siblings    &  TODO     &  \\ \hline
+FuncHead UD+Aux         & Plain                  & 67.86 & 69.25 \\ % (including aux) TODO this faces the problem that stacked AUX might be analyzed in the wrong order
+                    & Reordering Siblings    &  TODO     & \\  \hline 
+\end{tabular}
+\end{center}
+
+
+\begin{table}
+\begin{tabular}{l|rlll}
+Name & Words & Available\\ \hline
+GSD     & 184K & full\\
+PUD     & 26K & full\\
+Modern & 14K & full\\
+BCCWJ & 1,237K & POS+deps\\
+KTC & 189K & POS+deps \\
+\end{tabular}
+\end{table}
+
+
+
+
+2.4 total: 54K sentences
+
+Functional Heads:
+
+cc: \begin{CJK}{UTF8}{min}と, や\end{CJK}
+
+case: doesn't apply to verbs\footnote{https://universaldependencies.org/ja/dep/case.html}
+
+cop: \begin{CJK}{UTF8}{min}だ\end{CJK} 
+
+mark: \begin{CJK}{UTF8}{min}と, か\end{CJK} 
+
+Method for bringing S to the other side: sorting it after the other dependents, as these are short (auxiliaries etc).
+
+\paragraph{English}

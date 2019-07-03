@@ -174,12 +174,6 @@ logsoftmax = torch.nn.LogSoftmax()
 
 
 
-#def orderChildrenRelative(sentence, remainingChildren, reverseSoftmax):
-#       return childrenLinearized
-##       logits = [(x, distanceWeights[stoi_deps[sentence[x-1]["dependency_key"]]]) for x in remainingChildren]
-# #      logits = sorted(logits, key=lambda x:x[1], reverse=(not reverseSoftmax))
-#  #     childrenLinearized = map(lambda x:x[0], logits)
-#   #    return childrenLinearized           
 
 
 

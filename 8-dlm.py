@@ -154,7 +154,6 @@ def recursivelyLinearize(sentence, position, result, gradients_from_the_left_sum
   #    if "nsubj" in deps and len(set(deps)) > 1:
    #      print(deps)
 
-    #  line["children_HD"] = sorted(line["children_HD"], key=lambda x:0 if sentence[x-1]["coarse_dep"] != "nsubj" else 1)
       line["children_HD"] = sorted(line["children_HD"], key=lambda x:sentence[x-1]["length"])
 
       for child in line["children_HD"]:
@@ -174,12 +173,6 @@ logsoftmax = torch.nn.LogSoftmax()
 
 
 
-#def orderChildrenRelative(sentence, remainingChildren, reverseSoftmax):
-#       return childrenLinearized
-##       logits = [(x, distanceWeights[stoi_deps[sentence[x-1]["dependency_key"]]]) for x in remainingChildren]
-# #      logits = sorted(logits, key=lambda x:x[1], reverse=(not reverseSoftmax))
-#  #     childrenLinearized = map(lambda x:x[0], logits)
-#   #    return childrenLinearized           
 
 
 
@@ -248,6 +241,7 @@ def orderSentence(sentence, dhLogits, printThings):
             assert 0 not in line["children"]
             eliminated = eliminated + [sentence[x-1] for x in line["children"]]
 
+   assert SORT_RECURSIVELY_BY_LENGTH
    recursivelyLength(sentence, root, None, 0)
   
    linearized = []

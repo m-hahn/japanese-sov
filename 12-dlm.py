@@ -13,7 +13,7 @@ temperature = "Infinity"
 
 REMOVE_FUNCTIONAL_HEADS = False
 REVERSE_SUBJECT = False
-USE_FUNCHEAD_VERSIOM = False
+USE_FUNCHEAD_VERSION = False
 SORT_CHILDREN_BY_LENGTH = True
 REORDER_SUBJECT_INTERNAL = True
 USE_V_VERSION = False
@@ -41,7 +41,7 @@ conll_header = ["index", "word", "lemma", "posUni", "posFine", "morph", "head", 
 
 my_fileName = __file__.split("/")[-1]
 
-assert not USE_FUNCHEAD_VERSIOM
+assert not USE_FUNCHEAD_VERSION
 assert not USE_V_VERSION
 from corpusIterator import CorpusIterator
 
@@ -249,8 +249,8 @@ def orderSentence(sentence, dhLogits, printThings):
    recursivelyLength(sentence, root, None, 0)
   
    linearized = []
-
    recursivelyLinearize(sentence, root, linearized, 0)
+
 
                
 

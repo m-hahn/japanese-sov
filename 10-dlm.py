@@ -15,6 +15,10 @@ REMOVE_FUNCTIONAL_HEADS = False
 REVERSE_SUBJECT = True
 USE_FUNCHEAD_VERSIOM = False
 SORT_CHILDREN_BY_LENGTH = False
+REORDER_SUBJECT_INTERNAL = False
+USE_V_VERSION = False
+SORT_HD_SUBJECT_LAST = False
+SORT_RECURSIVELY_BY_LENGTH = True
 
 assert temperature == "Infinity"
 
@@ -38,7 +42,7 @@ conll_header = ["index", "word", "lemma", "posUni", "posFine", "morph", "head", 
 my_fileName = __file__.split("/")[-1]
 
 assert not USE_FUNCHEAD_VERSIOM
-#from corpusIterator import CorpusIterator
+assert not USE_V_VERSION
 from corpusIterator import CorpusIterator
 
 originalDistanceWeights = {}
@@ -155,9 +159,12 @@ def recursivelyLinearize(sentence, position, result, gradients_from_the_left_sum
 
     #  line["children_HD"] = sorted(line["children_HD"], key=lambda x:0 if sentence[x-1]["coarse_dep"] != "nsubj" else 1)
       assert not SORT_CHILDREN_BY_LENGTH
+      assert not SORT_HD_SUBJECT_LAST
 #      line["children_HD"] = sorted(line["children_HD"], key=lambda x:sentence[x-1]["length"])
 
       for child in line["children_HD"]:
+         assert not REORDER_SUBJECT_INTERNAL
+
          assert child > 0
          if "removed" not in sentence[child-1]:
            length = recursivelyLinearize(sentence, child, result, allGradients)
@@ -174,12 +181,6 @@ logsoftmax = torch.nn.LogSoftmax()
 
 
 
-#def orderChildrenRelative(sentence, remainingChildren, reverseSoftmax):
-#       return childrenLinearized
-##       logits = [(x, distanceWeights[stoi_deps[sentence[x-1]["dependency_key"]]]) for x in remainingChildren]
-# #      logits = sorted(logits, key=lambda x:x[1], reverse=(not reverseSoftmax))
-#  #     childrenLinearized = map(lambda x:x[0], logits)
-#   #    return childrenLinearized           
 
 
 
@@ -244,6 +245,7 @@ def orderSentence(sentence, dhLogits, printThings):
             assert 0 not in line["children"]
             eliminated = eliminated + [sentence[x-1] for x in line["children"]]
 
+   assert SORT_RECURSIVELY_BY_LENGTH
    recursivelyLength(sentence, root, None, 0)
   
    linearized = []
