@@ -129,14 +129,14 @@ Taken together, the results show that the typological frequency of SOV is compat
 
 There has been a suggestion that the typological distribution of word orders reflects a pressure towards efficiency of on-line syntactic processing.
 Prominent among these proposals is the idea that syntactic structures are easier to process if syntactically related words are closer together in the surface string.
-\cite{rijkhoff-word-1986} proposed a principle of \emph{Head Proximity}, arguing that, among other things, head nouns tend to be close to the verbs governing them.
-\cite{hawkins2014crosslinguistic} proposes a similar principle of \emph{Domain Minimization}, arguing that languages minimize the distances at which syntactic relations are established in a sentence.
+\cite{rijkhoff-word-1986} proposed a principle of \emph{Head Proximity}, arguing that head nouns tend to be close to the verbs governing them.
+\cite{hawkins2014crosslinguistic} proposed a similar principle of \emph{Domain Minimization}, arguing that languages minimize the distances at which syntactic relations are established in a sentence.
 The principle of \emph{Dependency Length Minimization} \citep{temperley2018minimizing} is a formalization of these ideas in terms of dependency grammar.
 
-Dependency Length Minimization has been argued to explain Greenberg's harmonic correlations \citep{rijkhoff-word-1986, hawkins1994performance}, and certain kinds of exceptions, such as why pronominal objects pattern differently from nominal objects \citep{dryer1992greenbergian}.
-Hawkins (\citep{hawkins2004efficiency, hawkins2007processing, hawkins2014crosslinguistic}) has assembled further evidence that such principles predict specific word order facts in many languages.
+Dependency Length Minimization has been argued to explain Greenberg's harmonic correlations \citep{rijkhoff-word-1986, hawkins1994performance}, and certain kinds of exceptions, such as why pronominal objects pattern differently from nominal objects \citep{dryer1992greenbergian}. % JD: depending on where you plan to send this, you'll have to be mch more explicit about what this means
+Hawkins \citep{hawkins2004efficiency, hawkins2007processing, hawkins2014crosslinguistic} has assembled further evidence that such principles predict specific word order facts in many languages. % JD: examples?
 
-Despite the success of Dependency Length Minimization, it appears to be at odds with the prevalence of SOV order: In a sentence such as
+Despite the success of Dependency Length Minimization, it appears to be at odds with the prevalence of SOV order \citep{ferrer-i-cancho-placement-2017}: In a sentence such as
 
 \ex.
 \begin{dependency}[theme = simple]
@@ -164,21 +164,24 @@ the overall dependency length is minimized by the English order, compared to SOV
 \end{dependency}
 
 
-This paper examines this claim, asking whether the prevalence of SOV orders constitutes a challenge for Dependency Length Minimization.
+This paper examines this claim,  % JD: spell out the claim again
+asking whether the prevalence of SOV orders constitutes a challenge for Dependency Length Minimization.
 
-First, does the above claim remain true if we consider sentences more complex than the three-word one above?
+First, does the above claim remain true if we consider sentences more complex than the three-word one above? % JD: Give people the intuition why it may not
 In particular, does it remain true if we consider the average dependency length over the distribution of sentences as found in a corpus?
 We will address this question by comparing the dependency length of actual Japanese orderings with counterfactual orderings exhibiting SVO order.
 
 
-Second, what is the situation if we consider a more direct formalization of online memory limitations?
+Second, what is the situation  % JD: what kinds of situations are you considering?
+if we consider a more direct formalization of online memory limitations?
 While Dependency Length Minimization is agreed to reflect working memory limitations in incremental processing \citep{hawkins1994performance, futrell2015largescale, temperley2018minimizing}, it does not directly formalize any psycholinguistically grounded quantity.
 The actual, experimentally measured, processing effort induced by long dependencies is not a linear function of dependency length \citep{gibson1998linguistic}, and depends on intervening elements \citep{gibson1998linguistic, lewis-activation-based-2005} and the types of dependencies \citep{demberg-data-2008}.
-We consider the Memory-Surprisal Tradeoff \citep{hahn2019memory}, a purely information-theoretic bound on memory load in incremental processing that makes no assumption about the encoding of syntactic structure.
+We consider  % JD: consider for what? why?
+the Memory-Surprisal Tradeoff \citep{hahn2019memory}, a purely information-theoretic bound on memory load in incremental processing that makes no assumption about the encoding of syntactic structure.
 In Experiment 2, we test whether SOV order as found in Japanese results in more efficient memory-surprisal tradeoffs than a hypothetical SVO version.
 
 \paragraph{Basic Sentence Structure in Japanese}
-This paragraph will review basic facts about Japanese word order, serving as the background for the two corpus experiments.
+This section will review basic facts about Japanese word order, serving as the background for the two corpus experiments.
 Japanese is a strictly head-final language. The unmarked order is SOV; subjects, objects, and other modifiers all precede the verb.
 NP dependents are marked with a case marker or postposition; for instance, \emph{ga} marks nominative, \emph{o} marks accusative, and \emph{wa} marks topics:
 
