@@ -15,16 +15,56 @@ summary(lm(Diff ~ 1, data=data))
 
 
 
+
+
+
 data = read.csv("results/japanese/depl-perSent-Japanese-GSD_2.4.tsv", sep="\t", row.names=NULL)
 data$Diff = data$Real - data$Counterfactual
 summary(lm(Diff ~ 1, data=data))
+
+binom.test(sum(data$Diff < 0), n=nrow(data), p=0.5, alternative="t")
+
+data2 = data %>% filter(Diff != 0)
+binom.test(sum(data2$Diff < 0), n=nrow(data2), p=0.5, alternative="g")
+
+library(ggplot2)
+
+GSD = data %>% mutate(Corpus = "GSD")
+
+
+
 
 data = read.csv("results/japanese/depl-perSent-Japanese-BCCWJ_2.4.tsv", sep="\t", row.names=NULL)
 data$Diff = data$Real - data$Counterfactual
 summary(lm(Diff ~ 1, data=data))
 
+data2 = data %>% filter(Diff != 0)
+binom.test(sum(data2$Diff < 0), n=nrow(data2), p=0.5, alternative="g")
+
+
+BCCJW = data %>% mutate(Corpus = "BCCJW")
+
+
+
 data = read.csv("results/japanese/depl-perSent-Japanese-KTC_2.4.tsv", sep="\t", row.names=NULL)
 data$Diff = data$Real - data$Counterfactual
 summary(lm(Diff ~ 1, data=data))
+
+
+data2 = data %>% filter(Diff != 0)
+binom.test(sum(data2$Diff < 0), n=nrow(data2), p=0.5, alternative="g")
+
+KTC = data %>% mutate(Corpus = "KTC")
+
+plot = ggplot(data=rbind(GSD, BCCJW, KTC) %>% filter(Diff != 0), aes(x=Corpus, y=Diff)) + geom_violin()
+plot = plot + ylim(-20, 20)
+
+
+plot = ggplot(data=rbind(GSD, BCCJW, KTC) %>% filter(Diff != 0), aes(x=Diff)) + geom_bar() + facet_wrap(~Corpus)
+plot = plot + xlim(-40, 40) + xlab("Dependency Length Reduction in SOV Order") + ylab("Sentences")
+ggsave(plot, file="figures/dependency_lentgh_differences_byCorpus.pdf")
+
+
+
 
 
