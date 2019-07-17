@@ -135,7 +135,8 @@ The principle of \emph{Dependency Length Minimization} \citep{temperley2018minim
 
 Dependency Length Minimization has been argued to explain Greenberg's harmonic correlations \citep{rijkhoff-word-1986, hawkins1994performance}, and certain kinds of exceptions, such as why pronominal objects pattern differently from nominal objects \citep{dryer1992greenbergian}. % JD: depending on where you plan to send this, you'll have to be mch more explicit about what this means
 Hawkins \citep{hawkins2004efficiency, hawkins2007processing, hawkins2014crosslinguistic} has assembled further evidence that such principles predict specific word order facts in many languages. 
-A prominent example is English Heavy NP Shift, which reduces the dependency length between verbs and objects by moving very long objects to the right of shorter dependents \citep{hawkins1994performance, wasow1997end, yamashita2001long}.
+A prominent example is English Heavy NP Shift, which reduces the dependency length between verbs and objects by moving very long objects to the right of shorter dependents \citep{hawkins1994performance, wasow1997end}.
+Japanese shows an analogous pattern, reducing dependency length by moving long objects earlier~\citep{yamashita2001long}.
 
 Despite the success of Dependency Length Minimization, it appears to be at odds with the prevalence of SOV order \citep{ferrer-i-cancho-placement-2017}: In a sentence such as
 
@@ -168,8 +169,8 @@ This appears to entail that Dependency Length Minimization should incorrectly pr
 This paper examines this claim,  
 asking whether the prevalence of SOV orders indeed constitutes a challenge for Dependency Length Minimization.
 
-First, does the above claim remain true if we consider sentences more complex than the three-word one above? % JD: Give people the intuition why it may not
-Note that there may be cases where SOV order reduces length compared to SVO order.
+First, does the above claim remain true if we consider sentences more complex than the three-word one above? 
+There may be sentences in which SOV order reduces length compared to SVO order:
 This could happen in embedded clauses, in particular if subjects are similarly long or even longer than objects.
 Depending on the frequency of different configurations in the language, such situations could outweigh cases in which SVO reduces length.
 We therefore investigate which order reduces the \emph{average dependency length} over the \emph{distribution} of sentences as found in a corpus.
@@ -185,9 +186,11 @@ In Experiment 2, we test whether SOV order as found in Japanese results in more 
 
 \paragraph{Data}
 We will base all our experiments on the Universal Dependencies \citep{nivre2019universal} treebanks.
-
-GSD, BCCWJ, KTC
-
+This collection has three large Japanese treebanks (GSD, BCCWJ, KTC).\footnote{Two smaller corpora have no training partition, and were thus not used in this study.}
+GSD and KTC reflect news text, these contain 7K and 6K sentences, respectively.
+The much larger BCCJW (41K sentences) is based on the Balanced Corpus of Contemporary Written Japanese \citep{Maekawa2014}, reflecting a balanced selection of multiple genres.
+Each corpus has a predefined split into three sets, a large training set, and two smaller held-out sets (\textit{dev} and \textit{test}).
+We use the training set for our analyses, and leave to other partitions for future experiments.
 
 
 \paragraph{Basic Sentence Structure in Japanese}
@@ -204,7 +207,7 @@ child-\textsc{pl} \textsc{nom} that park \textsc{loc} baseball \textsc{acc} do \
 `Children play baseball in that park' \citep[p. 118]{iwasaki2013japanese}
 
 Tense, aspect, and mood markers follow the verb.
-These elements are suffixes, though they are annotated as individual words in the Universal Dependencies \citep{nivre2019universal} treebanks, the source of our syntactically annotated corpus data: % JD: need to say what UD is; reference
+These elements are suffixes, though they are annotated as individual words in the Universal Dependencies \citep{nivre2019universal} treebanks, the source of our syntactically annotated corpus data:
 
 \exg. [taroo ga] [ki o] taoshi-te-iru \\
 Taro \textsc{nom} tree \textsc{acc} make.fall-\textsc{suff}-\textsc{asp:nopast} \\
@@ -251,6 +254,7 @@ In accordance with the head-final order, all embedded clauses precede the verb; 
 
 % JD: Can you, based on these examples, already give the reader the intuition here explicitly for why SOV order might not be incompatible with DLM after all? 
 
+
 \section{Experiment 1: Comparison of Dependency Length}
 
 \subsection{Method}
@@ -281,7 +285,7 @@ For instance, the example \ref{ex:taro-tree} above is converted as follows:
 \end{dependency}
 
 
-We restricted the experiment to the training partitions of each treebank, leaving the held-out partitions for future confirmatory research. % JD training, held-out
+We restricted the experiment to the training partitions of each treebank, leaving the held-out partitions for future confirmatory research. 
 
 Again following \cite{futrell2015largescale}, we measure the length of a dependency by the number of words intervening between head and dependent, plus one. 
 The overall dependency length of a sentence is the sum of the lengths of all dependencies in that sentence.
@@ -357,14 +361,15 @@ We also report the $t$-value for the per-sentence difference between the two con
 In each of the corpora, the overall dependency length is lower on average in the original SOV orders than in counterfactual orders where subject and object are ordered on different sides of the verb.
 The $t$ values indicate that all differences are highly reliable ($p < 0.0001$ in a two-sided $t$-test for the null that the mean difference is $0$).
 
-We also conducted an exact binomial test, against the null that, conditional on their being a difference between the two conditions, dependency length is higher in the in  $\geq 50\%$ of cases.
-This test confirmed our results, consistenty rejecting the null ($p < 0.0001$) on each of the three datasets
+In Figure~\ref{fig:memsurp-jap}, we show the distribution of dependency length reduction of SOV order vs. counterfactual SVO order.
+The plot shows that both increase and decrease of length is common, but the number of sentences showing a decrease is larger.
+
+We confirmed this using an exact binomial test, against the null that, conditional on their being a difference between the two conditions, dependency length is higher in the in  $\geq 50\%$ of cases.
+This test confirmed our results, consistenty rejecting the null ($p < 0.0001$) on each of the three datasets.
 
 Note that the overall average difference is not large, corresponding to $\approx 1$ word.
-This is because the averages is taken over all sentences in the corpus.
+This can be attributed to the fact that the averages is taken over all sentences in the corpus.
 
- % JD the difference is not huge -- ~1 --, right? make sure to discuss this, and why an average diff of 1 is still meaningful
- 
 
 \begin{table}
 \begin{center}
@@ -380,6 +385,17 @@ KTC             &   6K   &  64.01 & 65.27 &  7.45\\ \hline
 \end{table}
 
 
+Figure
+
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.9\textwidth]{figures/dependency_lentgh_differences_byCorpus.pdf}
+\caption{Dependency Length Difference between real (SOV) and couterfactual (SVO) orders, conditioned on the difference being nonzero. For legibility, we clipped the $x$-axis at 5\% quantiles of the BCCJW corpus.}\label{fig:memsurp-jap}
+\end{figure}
+
+
+
 
 \subsection{Discussion}
 We found that SOV orders reduce average dependency length compared to counterfactual SOV orders, when applied to Japanese corpus data.
@@ -389,7 +405,7 @@ We therefore expect that the lengths of the \emph{acl}, \emph{mark}, \emph{case}
 
 Furthermore, as discussed above, we hypothesize that they increase dependency lengths between verbs and those elements that tend to appear to the left of subjects, such as the various types of adverbial modifiers (such as \textit{advmod}, \textit{obl}), and left-dislocated elements (\textit{dislocated}).
 
-We investigated this using the GSD corpus. % JD what kind of corpus is this?
+We investigated this using the GSD corpus.
 For each dependency type, we calculated how much dependency length is reduced on average by the real orders.
 Results are shown in Table~\ref{fig:shortened} (for dependencies with overall length reduction) and Table~\ref{fig:shortened} (for dependencies with overall length increase).
 In agreement with the predictions, we find reliable mean reductions for the \emph{acl}, \emph{mark},\emph{case}, and \emph{cop} dependencies.
@@ -464,6 +480,8 @@ By tracing out all values $T >0$, one can obtain a bound on the tradeoff curve f
 
 \paragraph{Setup}
 We estimated the Conditional Mutual Information $I_t$ (for $t=1,2,\dots,20$) using standard estimation methods for language modeling based on neural networks~\citep{hochreiter-long-1997}, as described in \citet{hahn2019memory}.
+This estimation method is based purely on surface strings, without any structural assumptions.
+
 We then used the theoretical result described above to compute memory-surprisal tradeoff curves of real and counterfactual orderings.
 
 We could only use the GSD treebank here (7K sentences), as the others come only with POS and dependency annotation, with the original words removed due to copyright restrictions.
@@ -505,6 +523,8 @@ In both languages, the real orders show better memory-surprisal tradeoffs than t
 
 
 \section{Discussion}
+
+% JD Finally, the paper ends somewhat abruptly -- can you say a few words about the limitations of such analyses, if any? Or are there different ways of testing whether counterfactual Japanese is better/worse than real Japanese? If so, and these different ways are interesting but you decided against them anyway, say what they are and why you decided against them? Also say that one can do this in principle for any language (and one should!).
 
 Limitations of such studies
 
