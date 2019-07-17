@@ -1,5 +1,5 @@
 import os
-resus = [x for x in os.listdir("results/ptb/") if x.startswith("estimates-PTB_yWithMorphologySequentialStreamDropoutDev_BaselineLanguage_Fast_SaveLast_NoFinePOS_OnlyWordForms_BoundedVocab_Mixed.py_model_") and x.endswith("_REAL_REAL.txt")]
+resus = [x for x in os.listdir("results/ptb/") if x.startswith("estimates-PTB_yWithMorphologySequentialStreamDropoutDev_BaselineLanguage_Fast_SaveLast_NoFinePOS_OpenVocab_WordForms_Dropout_Constituency_Deps_Mixed.py_model_") and x.endswith("_REAL_REAL.txt")]
 
 with open("results/ptb/tradeoff-summary.tsv", "w") as outFile:
  print >> outFile, "\t".join(["Model", "Condition", "Distance", "MI", "UnigramCE"])
