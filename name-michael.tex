@@ -108,7 +108,7 @@
 \newcommand{\japanese}[1]{\begin{CJK}{UTF8}{min}#1\end{CJK}}
 
 
-\title{Dependency Length Minimization and Basic Word Order: A Corpus Study of Japanese (collaborative version)}
+\title{Dependency Length Minimization and Basic Word Order: A Corpus Study of Japanese}
 \author{Michael Hahn \\ Stanford University \\ mhahn2@stanford.edu}
 \date{\today}
 \begin{document}
@@ -117,7 +117,7 @@
 The principle of Dependency Length Minimization holds that languages tend to exhibit word orders that reduce the length of syntactic dependencies.
 Evidence for this hypothesis has been found in data from many languages, and it has been argued to accurately predict many phenomena across languages.
 However, it appears to be at odds with the high typological frequency of SOV and VSO orders, as SVO orders would seem to provide shorter dependencies between verbs and their arguments.
-We report a corpus-based study of Japanese that tests this.
+We report a corpus-based study of Japanese that tests whether the typological frequency of SOV is compatible with Dependency Length Minimization.
 In Study 1, we compare dependency lengths in real Japanese corpus data with a counterfactual SVO-like version of Japanese.
 Results show that real Japanese with SOV order has shorter dependencies than the counterfactual SVO version.
 In Study 2, we replicate this result using the Memory-Surprisal tradeoff, an information-theoretic measure of memory load in sentence processing that makes no assumptions about the format of syntactic representations. 
@@ -165,24 +165,27 @@ the overall dependency length is minimized by the English order, compared to SOV
    %\depedge[arc angle=50]{7}{6}{ATT}
 \end{dependency}
 
-This appears to entail that Dependency Length Minimization should incorrectly predict strong crosslinguistic prevalence of SVO order.
-This paper examines this claim,  
-asking whether the prevalence of SOV orders indeed constitutes a challenge for Dependency Length Minimization.
+%JD This is rhetorically a bit unfortunate -- "appears" "entail" "should" "incorrectly" "predict" -- there are too many interactions between the semantics of these words to understand what a) DLT predicts, b) the facts are, c) the claim is that you're going to test. Split this up in a way that these three components become clear. Then it'll be easier to refer back to "the above claim"
 
-First, does the above claim remain true if we consider sentences more complex than the three-word one above? 
+One might conclude from these examples that Dependency Length Minimization predicts strong crosslinguistic prevalence of SVO order \citep{ferrer-i-cancho-placement-2017}.
+This paper examines this claim, asking whether the prevalence of SOV orders indeed constitutes a challenge for Dependency Length Minimization.
+
+First, does the above conclusion remain true if we consider sentences more complex than the three-word one above? 
 There may be sentences in which SOV order reduces length compared to SVO order:
 This could happen in embedded clauses, in particular if subjects are similarly long or even longer than objects.
 Depending on the frequency of different configurations in the language, such situations could outweigh cases in which SVO reduces length.
 We therefore investigate which order reduces the \emph{average dependency length} over the \emph{distribution} of sentences as found in a corpus.
 We will address this question by comparing the dependency length of actual Japanese orderings with counterfactual orderings exhibiting SVO order.
+If actual Japanese sentences exhibit shorter average dependency length than these counterfactual orders, then this would provide evidence that -- given the syntactic structures actually occurring in Japanese -- the observed SOV order is best for Dependency Length Minimization.\footnote{Code and results for the studies described here are available at \url{https://github.com/m-hahn/japanese-sov}.}
 
 Second, we ask which basic order improves processing efficiency
 if we consider a more direct formalization of online memory limitations.
 While Dependency Length Minimization is agreed to reflect working memory limitations in incremental processing \citep{hawkins1994performance, futrell2015largescale, temperley2018minimizing}, it does not directly formalize any psycholinguistically grounded quantity.
 The actual, experimentally measured, processing effort induced by long dependencies is not a linear function of dependency length \citep{gibson1998linguistic}, and depends on intervening elements \citep{gibson1998linguistic, lewis-activation-based-2005} and the types of dependencies \citep{demberg-data-2008}.
-We will investigate predictions made by  % JD: consider for what? why?
+As a more direct formalization of memory limitations, we will  investigate predictions made by 
 the Memory-Surprisal Tradeoff \citep{hahn2019memory}, a purely information-theoretic bound on memory load in incremental processing that makes no assumption about the encoding of syntactic structure.
 In Experiment 2, we test whether SOV order as found in Japanese results in more efficient memory-surprisal tradeoffs than a hypothetical SVO version.
+If this is true, then this would provide evidence that a preference for SOV in Japanese is a prediction not only of Dependency Length Minimization, but of models positing memory limitations in online processing more generally.
 
 \paragraph{Data}
 We will base all our experiments on the Universal Dependencies \citep{nivre2019universal} treebanks.
@@ -190,7 +193,7 @@ This collection has three large Japanese treebanks (GSD, BCCWJ, KTC).\footnote{T
 GSD and KTC reflect news text, these contain 7K and 6K sentences, respectively.
 The much larger BCCJW (41K sentences) is based on the Balanced Corpus of Contemporary Written Japanese \citep{Maekawa2014}, reflecting a balanced selection of multiple genres.
 Each corpus has a predefined split into three sets, a large training set, and two smaller held-out sets (\textit{dev} and \textit{test}).
-We use the training set for our analyses, and leave to other partitions for future experiments.
+We use the training set for our analyses, and leave other partitions for future experiments.
 
 
 \paragraph{Basic Sentence Structure in Japanese}
@@ -257,11 +260,14 @@ In accordance with the head-final order, all embedded clauses precede the verb; 
 
 \section{Experiment 1: Comparison of Dependency Length}
 
+
+In Experiment 1, we will compare dependency lengths in real Japanese corpus data with a counterfactual SVO-like version of Japanese.
+
 \subsection{Method}
 
 %\paragraph{Japanese}
 We based our experiments on the Universal Dependencies treebanks.
-Following \cite{futrell2015largescale}, we preprocessed these by promoting functional words
+Following \cite{futrell2015largescale}, we converted these into a format closer to standard syntactic theory by promoting functional words
 (conjunctions \texttt{cc}, 
 postpositions \texttt{case},
 copulas \texttt{cop},
@@ -290,11 +296,14 @@ We restricted the experiment to the training partitions of each treebank, leavin
 Again following \cite{futrell2015largescale}, we measure the length of a dependency by the number of words intervening between head and dependent, plus one. 
 The overall dependency length of a sentence is the sum of the lengths of all dependencies in that sentence.
 
-For each sentence in the treebanks, we compared its total dependency length to that of a version to which the following manipulation was applied: % why was this manipulation applied? what does it simulate? what do we gain by doing this?
-
-Any subject, identified as the dependent of an \textit{nsubj} dependency, was moved to the right of its head.
+We now describe how we constructed the counterfactual SVO-like version of Japanese.
+%For each sentence in the treebanks, we compared its total dependency length to that of a version to which the following manipulation was applied: % why was this manipulation applied? what does it simulate? what do we gain by doing this?
+In real (SOV) Japanese, subjects and subjects are ordered on the same side of the verb.
+We obtained an SVO-like version by moving any subject, identified as the dependent of an \textit{nsubj} dependency, to the right of its head.
 Heads sometimes have other dependencies to its right side, in particular verbs often have \textit{aux} dependents on the right.
 We ordered the subject after these dependents.
+This manipulation results in a version of Japanese that has OVS order.
+Since dependency length is left-right invariant, it equally corresponds to an SVO version of Japanese, in which all phrases are strictly head-initial, and only subjects (\textit{nsubj}) and auxiliaries (\textit{aux}) precede their heads.
 As subject NPs are mostly longer than auxiliaries (which always consist of one word), this method minimizes dependency length among all ways of placing the subject after the head, and thus biases \emph{against} our hypothesis that SOV worder is optimal for dependency length.
 For instance, the example (\ref{ex:taro-tree}) above would become
 \exg.  [ki o] taoshi-te-iru [taroo ga] \\
@@ -340,8 +349,6 @@ For instance, the example (\ref{ex:taro-tree}) above would become
 `Taro grieved that Hanako had run away from home.' \citep[p. 224]{iwasaki2013japanese}\label{ex:hanako-ran-counter}
 
 
-This manipulation results in a version of Japanese that has OVS order.
-Since dependency length is left-right invariant, it equally corresponds to an SVO version of Japanese, in which all phrases are strictly head-initial, and only subjects (\textit{nsubj}) and auxiliaries (\textit{aux}) precede their heads.
 
 
 We first discuss under what circumstances we expect real or counterfactual Japanese lead to shorter dependency lengths. % JD: note
@@ -355,20 +362,24 @@ Second, comparison of \ref{ex:hanako-ran} and \ref{ex:hanako-ran-counter} shows 
 Clearly, which of the two orders results in shorter overall dependency lengths will depend on the relative distributions of different configurations in corpus data. % be more explicit -- what are the relevant configurations?
 
 \subsection{Results}
-In Table~\ref{tab:depl-resu}, we show the results for all three corpora. % JD: also include a plot with mean dependency length and a visualization of the variance
-We report average per-sentence dependency lengths for the two conditions. % JD: what are the two conditions?
+In Table~\ref{tab:depl-resu}, we show the results for all three corpora.
+We report average per-sentence dependency lengths for real (SOV) and counterfactual (SVO) orders.
 We also report the $t$-value for the per-sentence difference between the two conditions.
 In each of the corpora, the overall dependency length is lower on average in the original SOV orders than in counterfactual orders where subject and object are ordered on different sides of the verb.
 The $t$ values indicate that all differences are highly reliable ($p < 0.0001$ in a two-sided $t$-test for the null that the mean difference is $0$).
 
-In Figure~\ref{fig:memsurp-jap}, we show the distribution of dependency length reduction of SOV order vs. counterfactual SVO order.
-The plot shows that both increase and decrease of length is common, but the number of sentences showing a decrease is larger.
+We confirmed this using an exact binomial test, against the null that, conditional on there being a difference between the two conditions, dependency length is higher in  $\geq 50\%$ of cases.
+This test confirmed our results, consistently rejecting the null ($p < 0.0001$) on each of the three datasets.
 
-We confirmed this using an exact binomial test, against the null that, conditional on their being a difference between the two conditions, dependency length is higher in the in  $\geq 50\%$ of cases.
-This test confirmed our results, consistenty rejecting the null ($p < 0.0001$) on each of the three datasets.
 
 Note that the overall average difference is not large, corresponding to $\approx 1$ word.
-This can be attributed to the fact that the averages is taken over all sentences in the corpus.
+This can in part be attributed to the fact that the averages is taken over all sentences in the corpus, and that many sentences show no difference in dependency length between real and counterfactual orders.
+
+In Figure~\ref{fig:memsurp-jap}, we show the distribution of dependency length reduction of SOV order vs. counterfactual SVO order.
+Again the difference between the two groups appears relatively small visually, but the analyses show that this difference is statistically reliable both in terms of the \emph{number of sentences} that show a dependency length reduction in the real order, and in terms of the \emph{average reduction} of dependency length.
+
+
+
 
 
 \begin{table}
@@ -385,13 +396,11 @@ KTC             &   6K   &  64.01 & 65.27 &  7.45\\ \hline
 \end{table}
 
 
-Figure
-
 
 \begin{figure}
     \centering
     \includegraphics[width=0.9\textwidth]{figures/dependency_lentgh_differences_byCorpus.pdf}
-\caption{Dependency Length Difference between real (SOV) and couterfactual (SVO) orders, conditioned on the difference being nonzero. For legibility, we clipped the $x$-axis at 5\% quantiles of the BCCJW corpus.}\label{fig:memsurp-jap}
+\caption{Dependency Length Difference between real (SOV) and couterfactual (SVO) orders, conditioned on the difference being nonzero. For legibility, we clipped the $x$-axis at 5\% quantiles of the BCCJW corpus. Sentences to the left of $x=0$ have shorter dependency length in real orders, sentences to the right have shorter length in counterfactual orders. }\label{fig:memsurp-jap}
 \end{figure}
 
 
@@ -401,18 +410,19 @@ Figure
 We found that SOV orders reduce average dependency length compared to counterfactual SOV orders, when applied to Japanese corpus data.
 How does this overall difference relate to specific dependencies? 
 As discussed above, we hypothesize that real orders reduce dependency length between verbs and elements that embed them -- i.e., matrix verbs (\emph{acl}), complementizers (\emph{mark}, \emph{case}), and copulas (\emph{cop}).
-We therefore expect that the lengths of the \emph{acl}, \emph{mark}, \emph{case}, and \emph{cop} dependencies are reduced in real orders.
+We therefore expect that the lengths of the \emph{acl}, \emph{mark}, \emph{case}, and \emph{cop} dependencies are \emph{reduced} in real orders.
 
-Furthermore, as discussed above, we hypothesize that they increase dependency lengths between verbs and those elements that tend to appear to the left of subjects, such as the various types of adverbial modifiers (such as \textit{advmod}, \textit{obl}), and left-dislocated elements (\textit{dislocated}).
+Furthermore, as discussed above, we hypothesize that they \emph{increase} dependency lengths between verbs and those elements that tend to appear to the left of subjects, such as the various types of adverbial modifiers (such as \textit{advmod}, \textit{obl}), and left-dislocated elements (\textit{dislocated}).
 
 We investigated this using the GSD corpus.
 For each dependency type, we calculated how much dependency length is reduced on average by the real orders.
 Results are shown in Table~\ref{fig:shortened} (for dependencies with overall length reduction) and Table~\ref{fig:shortened} (for dependencies with overall length increase).
-In agreement with the predictions, we find reliable mean reductions for the \emph{acl}, \emph{mark},\emph{case}, and \emph{cop} dependencies.
+In agreement with the predictions, we find reliable mean reductions for the \emph{acl}, \emph{mark}, \emph{case}, and \emph{cop} dependencies.
 We also find strong reduction for the \emph{nsubj} dependencies.
 
 
-Regarding increases, we find the strongest mean increases for relations representing elements occurring to the left of objects, similar to subjects (\emph{advmod}, \emph{dislocated}, \emph{obl}, \emph{advcl}, \emph{iobj}, \emph{csubj}, \emph{nmod}), in agreement with the predictions. % JD at this point remind us where the predictions came from and what the result suggests
+Regarding increases, we find the strongest mean increases for relations representing elements occurring to the left of objects, similar to subjects (\emph{advmod}, \emph{dislocated}, \emph{obl}, \emph{advcl}, \emph{iobj}, \emph{csubj}, \emph{nmod}).
+This again is in agreement with the prediction that dependency lengths should be inreased in SOV order for elements that tend to appear to the left of subjects in Japanese.
 
 \begin{table}
 \begin{center}
@@ -452,12 +462,6 @@ Regarding increases, we find the strongest mean increases for relations represen
 \caption{Dependencies that are lengthened in real orders, compared to counterfactual orders. See Figure~\ref{fig:shortened} for explanation of column names.}\label{fig:lengthened}
 \end{table}
 
-\subsection{Control Study: Korean}
-
-
-\subsection{Control Study: Adverbs}
-
-
 
 
 \section{Experiment 2: Memory-Surprisal Tradeoff}
@@ -466,12 +470,14 @@ In Experiment 1, we found that Dependency Length Minimization, applied to syntac
 However, dependency length presupposes a specific representation format of syntactic structures, and may not be robust to different versions of dependency grammar.
 The results from Experiment 1 might therefore be dependent on the analysis choices expressed in Universal Dependencies annotation.
 
-Furthermore, dependency length does not directly reflect any psycholinguistically grounded quantity, as actual processing effort induced by long dependencies is neither linear in length, nor independent of factors such as the intervening words and the type of dependency \citep{gibson1998linguistic,lewis-activation-based-2005,demberg-data-2008}.
 
-To address these concerns, we now turn to a measure of memory load that does not depend on the syntactic analysis, namely the Memory-Surprisal Tradeoff \citep{hahn2019memory}.
-The idea is that listeners maintaing imperfect memory of the input will incur higher surprisal.
-This results in a tradeoff between memory and surprisal.
-Languages enable more efficient processing under memory limitations if this tradeoff curve is more favorable, that is, if a listener with any fixed memory budget can achieve low surprisal.
+Furthermore, dependency length does not directly reflect a measure of memory load, as actual processing effort induced by long dependencies is neither linear in length, nor independent of factors such as the intervening words and the type of dependency \citep{gibson1998linguistic,lewis-activation-based-2005,demberg-data-2008}.
+
+To address these concerns, we now turn to a measure of processing under memory limitations that does not depend on the syntactic analysis, namely the Memory-Surprisal Tradeoff \citep{hahn2019memory}.
+This is based on the observation that listeners who maintain imperfect memory of the input will incur higher surprisal than listeners who maintain more detailed memory representations.
+This results in a tradeoff between memory and surprisal:
+For each budget of memory, quantified by the number of bits that a listener uses to encode information about the past, there is a minimal amount of surprisal that this listener will incur on average.
+Languages enable more efficient processing under memory limitations if this tradeoff is more favorable -- that is, if a listener with any fixed memory budget can achieve low surprisal.
 
 This tradeoff can be estimated using information-theoretic bounds that are independent of assumptions about how syntactic structure is encoded \citep{hahn2019memory}.
 For any $t = 1, 2, \dots$, let $I_t$ be the Conditional Mutual Information of two words $X_0, X_t$ conditioned on the intervening words:
@@ -481,7 +487,7 @@ For any $t = 1, 2, \dots$, let $I_t$ be the Conditional Mutual Information of tw
 This quantity  measures how much predictive information is provided by the next word $X_t$ by the word $t$ steps in the past.
 It is a statistical property of the language, and can be estimated from text data.
 
-\citet{hahn2019memory} show that a listener investing at most $\sum_{t=1}^T t I_t$ bits of memory will incur average surprisal at least $H[X_t| X_{<t}] + \sum_{t=T+1}^\infty I_t$.
+\citet{hahn2019memory} show that a listener who invests at most $\sum_{t=1}^T t I_t$ bits of memory will incur average surprisal at least $H[X_t| X_{<t}] + \sum_{t=T+1}^\infty I_t$.
 By tracing out all values $T >0$, one can obtain a bound on the tradeoff curve for any possible listener.
 
 \paragraph{Setup}
@@ -498,9 +504,9 @@ By controlling for differences between different random initializations, this me
 We estimated 20 such models to control for differences between random initializations.
 
 We also conducted an analogous study for English.
-It might be that SOV orders improve memory-surprisal tradeoffs across languages.
+It might be the case that SOV orders improve memory-surprisal tradeoffs across languages.
 Repeating the study for English controls for this:
-We predict that SVO order actually found in English will provide more favorable memory-surprisal tradeoffs than counterfactual SOV orders.
+If word orders provide efficient memory-surprisal tradoffs, then SVO order will provide more favorable memory-surprisal tradeoffs for English data than counterfactual SOV orders.
 We use the Penn Treebank~\citep{marcus-building-1993}.
 For counterfactual orders, we order subject NPs (\texttt{NP-SBJ}) after VPs (\texttt{VP}), producing VOS order.
 Again, since the memory-surprisal tradeoff curves are left-right invariant, this is equivalent to SOV order.
@@ -512,7 +518,7 @@ Results are shown for Japanese in Figure~\ref{fig:memsurp-jap}, and for English 
 In both languages, the real orders show better memory-surprisal tradeoffs than the counterfactual ones, in every one of the 20 runs of the LSTM language model.
 
 In terms of the size of the effect, the difference between the two versions is considerably larger in Japanese than in English.
-Nonetheless, the English result confirms that language-specific properties influence which basic word order provides more memory-surprisal tradeoffs.
+Nonetheless, the English result confirms that language-specific properties influence which basic word order provides better memory-surprisal tradeoffs.
 
 
 \begin{figure}
@@ -531,29 +537,36 @@ Nonetheless, the English result confirms that language-specific properties influ
 
 \section{Discussion}
 
-% JD Finally, the paper ends somewhat abruptly -- can you say a few words about the limitations of such analyses, if any? Or are there different ways of testing whether counterfactual Japanese is better/worse than real Japanese? If so, and these different ways are interesting but you decided against them anyway, say what they are and why you decided against them? Also say that one can do this in principle for any language (and one should!).
 
-%Counterfactual word order: precedent
+We found evidence that SOV order as found in Japanese reduce memory load in processing, using two quantitative models of memory load: Dependency length and the Memory-Surprisal tradeoff.
+These results suggest that the observed prevalence of SOV order is not at odds with Dependency Length Minimization and similar locality principles.
+Instead, these principles interact with the language-specific distribution of syntactic structures to make language-specific predictions about which word order should be preferred on processing grounds.
 
 
-This methodology is applicable crosslinguistically, and future work can apply it to other languages. 
-
-A limitation of this study is that the counterfactual versions of languages might differ from actually occurring SVO languages, and might therefore be unrealistic as a comparison baseline.
+A limitation of this study is that our counterfactual SVO version of Japanese might have properties that distinguish it from actually occurring SVO languages,
+and might therefore be unrealistic as a comparison baseline. 
 For instance, in SVO languages, certain adverbs (e.g., high-scoping ones) precede the verb together with the subject, and others (e.g., manner adverbs) follow it, together with the object.
-In this study, we created a counterfactual SVO version of Japaese in which all adverbs follow the verb.
-The available UD annotation does not make it possible to easily identify advebs that might typically precede the verb in an SVO language.
+For instance, in English, manner adverbs (e.g., \emph{quickly}) may follow or precede the verb. Speaker-oriented adverbs (e.g., \emph{fortunately}) tend to occur before the verb.
+In this study, we created a counterfactual SVO version of Japanese in which all adverbs uniformly follow the verb.
+The available UD annotation does not make it possible to easily identify adverbs that might typically precede the verb in an SVO language.
 
 
-A limitation common to many studies based on such treebank data is that the data comes from written sources, whereas pressures coming from cognitive constraints arguably shape spoken language in language change.
+
+The observed dependency length reduction in real Japanese orders seems small, being approximately 1 word per sentence.
+The question arises whether such a difference is sufficient as a pressure constraining language change.
+Finding ways to estimate what effect sizes might be needed to shape language change is an important question for future work. % say a little more about this -- how might one go about estimating such effect sizes?
 
 
-%Neat paper! My main comment is: in a lot of places, it would be helpful if spelled out your assumptions a little more, and if you foreshadowed the reason for the analyses you're conducting. A lot of these places are marked in the attached pdf (comments generated in Adobe Acrobat). Also, can you say a little more about whether the LSTM-based analysis is really theory-neutral? Is it based purely on surface strings without any structural assumptions? Finally, the paper ends somewhat abruptly -- can you say a few words about the limitations of such analyses, if any? Or are there different ways of testing whether counterfactual Japanese is better/worse than real Japanese? If so, and these different ways are interesting but you decided against them anyway, say what they are and why you decided against them? Also say that one can do this in principle for any language (and one should!).
+A common limitation of studies based on treebank data is that the data comes from written sources, whereas pressures coming from cognitive constraints arguably shape spoken language in language change.
+Annotating spoken data, or behavioral experiments could alleviate this concern in future work. % why is this a limitation, given that you're talking about a synchronic snapshot of the language? or say a little more about why this is or isn't a worrisome limitation
+
 
 
 \section{Conclusion}
 We examined the question whether the typological prevalence of SOV order constitutes a problem for the idea that crosslinguistic word order distributions reflect optimization for processing under memory constraints.
-We found that this is not the case: Word orders found in English and Japanese are optimal for the respective languages, as they reduce average dependency length and memory load compared to counterfactual orderings. % JD: tell us again *why*.
+We found that this is not the case: Word orders found in English and Japanese are optimal for the respective languages, as they reduce average dependency length and memory load compared to counterfactual orderings.
 The results highlight that predictions of efficiency principles for language structure have to be evaluated against specific data from languages, and that they can have language-specific consequences even in domains that are crosslinguistically relevant, such as basic word order.
+Our methodology is applicable crosslinguistically, and future work should apply it both to other languages, and to other phenomena where efficiency principles might make language-specific predictions.
 
 
 \bibliography{literature}
