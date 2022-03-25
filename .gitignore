@@ -1,2 +1,4 @@
 estimates*txt
 *.pyc
+python27
+results/
